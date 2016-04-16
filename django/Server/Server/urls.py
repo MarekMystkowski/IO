@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from WebNotifier.views import add
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^log/', include('WebNotifier.log.urls')),
     url(r'^api/', include('WebNotifier.api.urls')),
+    url(r'^add/', add),
 ]
