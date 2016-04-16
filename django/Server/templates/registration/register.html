@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rejestracja</title>
+    </head>
+
+    <body>
+        <h1>Rejestracja użytkownika</h1>
+
+        {% if registered %}
+            <strong>Dziękujemy za zarejestrowanie.</strong>
+            <a href="/log/">Powrót do log...</a><br />
+        {% else %}
+            <strong>Zarejestruj się</strong><br />
+            <form id="user_form" method="post" action="/log/register/"
+                  enctype="multipart/form-data">
+
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                <input type="submit" name="submit" value="Register" />
+            </form>
+        {% endif %}
+    </body>
+</html>
