@@ -57,7 +57,7 @@ def edit_page(request):
     page.save()
 
     return render( request, 'edit_page.html', {
-        'name_url': url_name(page.login_url),
-        'refresh_period': '.'.join(str(page.interval).split(',')),
-        'currently_observed': page.active,
+        'login_url': url_name(page.login_url),
+        'interval': '.'.join(str(page.interval).split(',')),
+        'active': page.active,
     })
