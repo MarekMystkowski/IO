@@ -1,8 +1,8 @@
 
-var co_klikniente = "";
+var co_klikniete = "";
 var jaki_widok = "";
 function PoinformujOKliknieciu() {
-    chrome.runtime.sendMessage({dane: co_klikniente}, function(response) {
+    chrome.runtime.sendMessage({dane: co_klikniete}, function(response) {
         jaki_widok = response.odp;
         PoprawHTML();
     });
@@ -17,17 +17,17 @@ window.onload = function() {
 
 function PoprawHTML() {
     var ukryty = "display:none";
-    var widzoczny = "";
+    var widoczny = "";
     document.getElementById("Czy_z_logowaniem").style = ukryty;
     document.getElementById("Czy_wprowadzone_dane").style = ukryty;
     document.getElementById("Czekanie_na_zalogowanie").style = ukryty;
     document.getElementById("Dodawanie_obiektów").style = ukryty;
-    document.getElementById(jaki_widok).style = widzoczny;
+    document.getElementById(jaki_widok).style = widoczny;
 }
 
 function klikniecie(co) {
     return function () {
-        co_klikniente = co;
+        co_klikniete = co;
         PoinformujOKliknieciu();
     };
 }

@@ -1,4 +1,4 @@
-from WebNotifier.log.views import register, user_login, user_logout, index
+from WebNotifier.log.views import *
 from django.conf.urls import url
 
 urlpatterns = [

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from WebNotifier import  models
+from WebNotifier.models import *
 
-@admin.register(models.Appliances, models.PageToObserve, models.RegisteredChanges, models.UserProfile)
-class Model(admin.ModelAdmin): pass
+admin.site.register(UserProfile)
+admin.site.register(Device)
+admin.site.register(Page)
+admin.site.register(Change)

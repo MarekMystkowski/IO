@@ -6,7 +6,7 @@ var stan = "Czy_z_logowaniem"; // Czy_wprowadzone_dane, Czekanie_na_zalogowanie,
 var inputs = [];
 var submit = [];
 var objects = [];
-var url_login = "";
+var login_url = "";
 
 /* Funkcje akcji dla każdego przycisku */
 function Czy_z_logowaniem_tak() {
@@ -18,9 +18,9 @@ function Czy_z_logowaniem_nie() {
 }
 
 function Wprowadzone_dane(){
-    chrome.tabs.executeScript(null, {file: 'dowland_inputs.js'});
+    chrome.tabs.executeScript(null, {file: 'download_inputs.js'});
     stan = "Czekanie_na_zalogowanie";
-    chrome.tabs.executeScript(null, {file: 'dowland_submit.js'});
+    chrome.tabs.executeScript(null, {file: 'download_submit.js'});
 }
 
 function Zalogowano() {
@@ -28,12 +28,11 @@ function Zalogowano() {
 }
 
 function Dodaj_objekt() {
-    chrome.tabs.executeScript(null, {file: 'dowland_object.js'});
+    chrome.tabs.executeScript(null, {file: 'download_object.js'});
 }
 
 
 function Zapisz_wszystko() {
-    chrome.tabs.executeScript(null, {file: 'not_dowland.js'});
     chrome.tabs.getSelected(null, function(tab) {
         chrome.tabs.remove(tab.id);
     })
@@ -81,15 +80,17 @@ chrome.runtime.onMessage.addListener(
 
 // obsługa komunikacji z skryptami:
 chrome.extension.onRequest.addListener(function(mess) {
-    if (mess[0] == "I") inputs = JSON.parse(mess.substring(1, mess.length));
-    if (mess[0] == "S") {
+    if (mess[0] == "I") {
+        inputs = JSON.parse(mess.substring(1, mess.length));
+    }
+    else if (mess[0] == "S") {
         if (stan == "Czekanie_na_zalogowanie") {
             submit =  JSON.parse(mess.substring(1, mess.length)).path;
             url_login = JSON.parse(mess.substring(1, mess.length)).url;
             Zalogowano();
         }
     }
-    if (mess[0] == "O") {
+    else if (mess[0] == "O") {
         if (stan == "Dodawanie_obiektów") {
             objects.push(JSON.parse(mess.substring(1, mess.length)));
         }

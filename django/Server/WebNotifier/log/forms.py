@@ -1,9 +1,9 @@
-import django.forms as froms
+import django.forms as forms
 
 from django.contrib.auth.models import User
 
-class UserForm(froms.ModelForm):
-    password = froms.CharField(widget=froms.PasswordInput())
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = User

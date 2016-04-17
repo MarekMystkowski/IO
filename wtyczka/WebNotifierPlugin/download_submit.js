@@ -6,14 +6,8 @@ document.addEventListener("click", function(elem) {
 function path(elem) {
     var result = [];
     while (elem.parentElement != null) {
-        chi = elem.parentElement.children;
-        var i = 0;
-        for (i = 0; i < chi.length; i++) {
-            if (chi[i] == elem) {
-                result.push(i);
-                break;
-            }
-        }
+        var index = [].indexOf.call(elem.parentElement.children, elem);
+        result.push(index);
         elem = elem.parentElement;
     }
     return result;
