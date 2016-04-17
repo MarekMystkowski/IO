@@ -23,7 +23,7 @@ function path(elem) {
         result.push(index);
         elem = elem.parentElement;
     }
-    return result;
+    return result.reverse();
 }
 
 
