@@ -1,4 +1,0 @@
-*.sqlite3
-django/Server/WebNotifier/migrations/0001_initial.py
-*.pyc
-*.pyc
