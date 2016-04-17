@@ -33,7 +33,10 @@ def register(request):
     })
 
 def user_login(request):
-
+    try:
+        next_page = request.POST['next']
+    except:
+        next_page = "/"
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -42,15 +45,15 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/log/')
+                return HttpResponseRedirect(next_page)
             else:
                 return HttpResponse("Your Rango account is disabled.")
         else:
             print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
+            return HttpResponse("Invalid login details supplied.Erro")
 
     else:
-        return render(request, 'registration/login.html', {})
+        return render(request, 'registration/login.html', {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''})
 
 @login_required
 def user_logout(request):

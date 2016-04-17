@@ -90,10 +90,10 @@ def add(request):
 def edit_page(request):
     try:
         id_page =  request.session['id_page']
+        page = PageToObserve.objects.filter(id=id_page).first()
     except KeyError:
-        HttpResponseRedirect('/')
+        return HttpResponseRedirect('/')
     user_profile = UserProfile.objects.filter(user=request.user).first()
-    page = PageToObserve.objects.filter(id= id_page).first()
     if user_profile != page.user :
         HttpResponseRedirect('/')
     plugin = {}
