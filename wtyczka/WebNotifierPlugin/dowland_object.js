@@ -1,30 +1,19 @@
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.split(search).join(replacement);
-};
-function addslashes( str ) {
-    return str.replaceAll("\\", "\\\\").replaceAll("'", "\\'");
-}
-
-
 document.addEventListener("click", function(elem) {
-    chrome.extension.sendRequest("O{ 'path' : " + path(elem.target) +
-        " , 'url' : '" + addslashes(document.URL) + "' }");
+    chrome.extension.sendRequest("O" + JSON.stringify({ path : path(elem.target) , url : document.URL }));
 });
 
-
 function path(elem) {
-    var result = "";
-    var par;
+    var result = [];
     while (elem.parentElement != null) {
-        par = elem.parentElement;
-        chi = par.children;
+        chi = elem.parentElement.children;
         var i = 0;
         for (i = 0; i < chi.length; i++) {
-            if (chi[i] == elem) result = i + ", " + result;
+            if (chi[i] == elem) {
+                result.push(i);
+                break;
+            }
         }
-        elem = par;
+        elem = elem.parentElement;
     }
-    if (result.length > 0) result = result.substring(0, result.length - 2);
-    return result = "( " + result + " )";
+    return result;
 }

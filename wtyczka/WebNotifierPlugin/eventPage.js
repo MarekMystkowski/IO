@@ -3,9 +3,10 @@
  */
 
 var stan = "Czy_z_logowaniem"; // Czy_wprowadzone_dane, Czekanie_na_zalogowanie, Dodawanie_obiektów
-var inputs = "";
-var submit = "";
-var _objects = "";
+var inputs = [];
+var submit = [];
+var objects = [];
+var url_login = "";
 
 /* Funkcje akcji dla każdego przycisku */
 function Czy_z_logowaniem_tak() {
@@ -14,7 +15,6 @@ function Czy_z_logowaniem_tak() {
 
 function Czy_z_logowaniem_nie() {
     stan = "Dodawanie_obiektów";
-    _objects = "[ ";
 }
 
 function Wprowadzone_dane(){
@@ -25,7 +25,6 @@ function Wprowadzone_dane(){
 
 function Zalogowano() {
     stan = "Dodawanie_obiektów";
-    _objects = "[ ";
 }
 
 function Dodaj_objekt() {
@@ -35,14 +34,6 @@ function Dodaj_objekt() {
 
 function Zapisz_wszystko() {
     chrome.tabs.executeScript(null, {file: 'not_dowland.js'});
-    if (_objects.length > 2) _objects = _objects.substring(0, _objects.length - 2);
-    _objects += " ]";
-    var mess_to_server = "{ 'inputs' : " + inputs + " , 'submit' : " + submit +
-        " , 'objects' : " + _objects + " }";
-
-
-     // TODO : WYSYLANIR NA SERWER
-    console.log(mess_to_server);
     chrome.tabs.getSelected(null, function(tab) {
         chrome.tabs.remove(tab.id);
     })
@@ -55,17 +46,20 @@ function Zapisz_wszystko() {
         form.appendChild(input);
     }
     var form = document.createElement('form');
-    form.method = 'GET';
+    form.method = 'POST';
     form.action = 'http://127.0.0.1:8000/add/';
-    append('mess_to_server', mess_to_server);
+    append('login_data',JSON.stringify({ inputs: inputs, submit : submit }));
+    append('data_to_observer',JSON.stringify(objects));
+    append('url_login', url_login);
     url += encodeURIComponent(form.outerHTML);
     url += encodeURIComponent('<script>document.forms[0].submit();</script>');
     chrome.tabs.create({url: url, active: true});
 
     stan = "Czy_z_logowaniem";
-    inputs = "";
-    submit = "";
-    _objects = "";
+    inputs = [];
+    submit = [];
+    objects = [];
+    url_login = "";
 }
 
 
@@ -87,16 +81,17 @@ chrome.runtime.onMessage.addListener(
 
 // obsługa komunikacji z skryptami:
 chrome.extension.onRequest.addListener(function(mess) {
-    if (mess[0] == "I") inputs = mess.substring(1, mess.length);
+    if (mess[0] == "I") inputs = JSON.parse(mess.substring(1, mess.length));
     if (mess[0] == "S") {
         if (stan == "Czekanie_na_zalogowanie") {
-            submit =  mess.substring(1, mess.length);
+            submit =  JSON.parse(mess.substring(1, mess.length)).path;
+            url_login = JSON.parse(mess.substring(1, mess.length)).url;
             Zalogowano();
         }
     }
     if (mess[0] == "O") {
         if (stan == "Dodawanie_obiektów") {
-            _objects += mess.substring(1, mess.length) + ", ";
+            objects.push(JSON.parse(mess.substring(1, mess.length)));
         }
     }
 });
