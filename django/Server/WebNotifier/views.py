@@ -1,9 +1,15 @@
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from WebNotifier.models import UserProfile, PageToObserve
 from datetime import datetime
 import urllib.parse
+
+
+def get_url_base(objects):
+    url_base = urllib.parse.urlsplit(objects[0]['url']).geturl()
+    if len(url_base) > 50: url_base = url_base[0:46] + " ..."
+    return url_base
 
 @login_required
 def add(request):
@@ -62,8 +68,6 @@ def add(request):
                 print('W inputs ścieżka nie spełnia standardu.')
                 raise
             tmp = urllib.parse.urlsplit(x['url'])
-        url_base = urllib.parse.urlsplit(objects[0]['url']).geturl()
-        if len(url_base) > 50: url_base = url_base[0:46] + " ..."
 
         data_to_observer = str(objects)
     except ImportError:
@@ -74,11 +78,38 @@ def add(request):
                              user=user_profile)
     new_page.save()
 
-
-
+    request.session['id_page'] = new_page.id
 
     return render( request, 'edit_page.html', {
-        'name_url' : url_base,
+        'name_url' : get_url_base(objects),
         'refresh_period' : '.'.join(str(new_page.refresh_period_ms / 1000).split(',')),
         'currently_observed' : True,
+    })
+
+@login_required
+def edit_page(request):
+    try:
+        id_page =  request.session['id_page']
+    except KeyError:
+        HttpResponseRedirect('/')
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    page = PageToObserve.objects.filter(id= id_page).first()
+    if user_profile != page.user :
+        HttpResponseRedirect('/')
+    plugin = {}
+    exec("objects = " + page.data_to_observer, plugin)
+
+    if request.method == 'POST':
+        try:
+            page.refresh_period_ms = int(float(request.POST['period']) * 1000)
+            page.currently_observed = False
+            if request.POST['currently'] == 'True': page.currently_observed = True
+        except KeyError: pass
+
+    page.save()
+
+    return render( request, 'edit_page.html', {
+        'name_url' : get_url_base(plugin['objects']),
+        'refresh_period' : '.'.join(str(page.refresh_period_ms / 1000).split(',')),
+        'currently_observed' : page.currently_observed,
     })
