@@ -32,16 +32,35 @@ function Dodaj_objekt() {
     chrome.tabs.executeScript(null, {file: 'dowland_object.js'});
 }
 
+
 function Zapisz_wszystko() {
     chrome.tabs.executeScript(null, {file: 'not_dowland.js'});
     if (_objects.length > 2) _objects = _objects.substring(0, _objects.length - 2);
     _objects += " ]";
     var mess_to_server = "{ 'inputs' : " + inputs + " , 'submit' : " + submit +
-        " , 'objeects' : " + _objects + " }";
+        " , 'objects' : " + _objects + " }";
 
+
+     // TODO : WYSYLANIR NA SERWER
     console.log(mess_to_server);
-    // TODO : WYSYLANIR NA SERWER
-    
+    chrome.tabs.getSelected(null, function(tab) {
+        chrome.tabs.remove(tab.id);
+    })
+
+    var url = "data:text/html;charset=utf8,";
+    function append(key, value) {
+        var input = document.createElement('textarea');
+        input.setAttribute('name', key);
+        input.textContent = value;
+        form.appendChild(input);
+    }
+    var form = document.createElement('form');
+    form.method = 'GET';
+    form.action = 'http://127.0.0.1:8000/add/';
+    append('mess_to_server', mess_to_server);
+    url += encodeURIComponent(form.outerHTML);
+    url += encodeURIComponent('<script>document.forms[0].submit();</script>');
+    chrome.tabs.create({url: url, active: true});
 
     stan = "Czy_z_logowaniem";
     inputs = "";

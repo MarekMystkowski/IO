@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Tools.scripts.objgraph import def2file
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -20,9 +21,9 @@ class PageToObserve(models.Model):
     url_to_login = models.TextField()
     login_data = models.TextField()
     data_to_observer = models.TextField()
-    last_page_content = models.TextField()
+    last_page_content = models.TextField(default="")
     currently_observed = models.BooleanField(default=True)
-    refresh_period = models.TimeField()
+    refresh_period_ms = models.IntegerField(default=5000)       # w milisekundach
 
 class RegisteredChanges(models.Model):
     page = models.ForeignKey(PageToObserve)
