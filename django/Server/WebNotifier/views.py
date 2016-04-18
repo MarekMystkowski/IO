@@ -15,8 +15,8 @@ def add(request):
     if request.method != 'POST':
         raise Http404("No POST data found.")
     try:
-        page_data = request.POST['data_to_observer']
-        login_url = request.POST['url_login']
+        page_data = request.POST['page_data']
+        login_url = request.POST['login_url']
         login_data = request.POST['login_data']
     except KeyError:
         raise Http404("Not enough POST data found.")

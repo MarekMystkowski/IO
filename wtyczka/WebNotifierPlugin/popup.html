@@ -2,43 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="popup.js"></script>
+    <style type="text/css">
+        html, body {
+            background-color: #DDDDEE;
+        }
+        div {
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        h4 {
+            margin: 6px 0px;
+        }
+        button {
+            margin: 8px 4px;
+        }
+    </style>
 </head>
 <body>
-    <div id="Czy_z_logowaniem">
-        <div id="pytanie1">
-            Czy strona wymaga logowania ?
+    <div>
+        <h4>Dodaj stronę do obserwacji</h4>
+    </div>
+
+    <div id="login_ask">
+        <div>
+            Czy strona wymaga logowania?
         </div>
-        <div id="odpowiedz1">
-            <button type="button" id="tak">Tak</button>
-            <button type="button" id="nie">Nie</button>
+        <div>
+            <button id="login_yes">Tak</button>
+            <button id="login_no">Nie</button>
         </div>
     </div>
 
-    <div id="Czy_wprowadzone_dane">
-        <div id="pytanie2">
-            Wprowadź dane wymagane do logowania.
+    <div id="login_wait">
+        <div>
+            Zaloguj się na stronie.
         </div>
-        <div id="odpowiedz2">
-            <button type="button" id="wprowadzone">Dane wprowadzone.</button>
-        </div>
-    </div>
-
-    <div id="Czekanie_na_zalogowanie">
-        <div id="komunikat1">
-            Teraz kliknij przycisk do zalogowania.
+        <div>
+            <button id="cancel_login">Anuluj</button>
         </div>
     </div>
 
-    <div id="Dodawanie_obiektów">
-        <div id="pytanie3">
-            Zaznacz obiekt do obserwowania i go dodaj,<br> lub zapisz już dodane obiekty.
+    <div id="objects">
+        <div>
+            Wybierz elementy, które chcesz obserwować.
         </div>
-        <div id="odpowiedz3">
-            <button type="button" id="dodaj">Dodaj obiekt.</button>
-            <button type="button" id="zapisz">Już wszystko.</button>
+        <div>
+            <button id="save">Zapisz</button>
+            <button id="cancel_objects">Anuluj</button>
         </div>
-
     </div>
-    <script src="popup.js"></script>
 </body>
 </html>

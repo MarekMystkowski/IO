@@ -1,39 +1,27 @@
 
-var co_klikniete = "";
-var jaki_widok = "";
-function PoinformujOKliknieciu() {
-    chrome.runtime.sendMessage({dane: co_klikniete}, function(response) {
-        jaki_widok = response.odp;
-        PoprawHTML();
-    });
+var view = "";
+
+function update() {
+    document.getElementById("login_ask").style.display = "none";
+    document.getElementById("login_wait").style.display = "none";
+    document.getElementById("objects").style.display = "none";
+    document.getElementById(view).style.display = "block";
 }
 
-window.onload = function() {
-    chrome.runtime.sendMessage({dane: "wyswietlanie"}, function(response) {
-        jaki_widok = response.odp;
-        PoprawHTML();
-    });
-};
-
-function PoprawHTML() {
-    var ukryty = "display:none";
-    var widoczny = "";
-    document.getElementById("Czy_z_logowaniem").style = ukryty;
-    document.getElementById("Czy_wprowadzone_dane").style = ukryty;
-    document.getElementById("Czekanie_na_zalogowanie").style = ukryty;
-    document.getElementById("Dodawanie_obiektów").style = ukryty;
-    document.getElementById(jaki_widok).style = widoczny;
-}
-
-function klikniecie(co) {
-    return function () {
-        co_klikniete = co;
-        PoinformujOKliknieciu();
+function click(msg) {
+    return function() {
+        chrome.runtime.sendMessage({data: msg}, function(response) {
+            view = response.data;
+            update();
+        });
     };
 }
 
-document.getElementById("tak").addEventListener("click", klikniecie("Czy_z_logowaniem_tak"));
-document.getElementById("nie").addEventListener("click", klikniecie("Czy_z_logowaniem_nie"));
-document.getElementById("wprowadzone").addEventListener("click", klikniecie("Wprowadzone_dane"));
-document.getElementById("dodaj").addEventListener("click", klikniecie("Dodaj_objekt"));
-document.getElementById("zapisz").addEventListener("click", klikniecie("Zapisz_wszystko"));
+window.onload = function() {
+    document.getElementById("login_yes").addEventListener("click", click("login_yes"));
+    document.getElementById("login_no").addEventListener("click", click("login_no"));
+    document.getElementById("cancel_login").addEventListener("click", click("cancel"));
+    document.getElementById("cancel_objects").addEventListener("click", click("cancel"));
+    document.getElementById("save").addEventListener("click", click("save"));
+    click("load")();
+};

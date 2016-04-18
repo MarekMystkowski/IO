@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edycja srony.</title>
+    <title>Edycja strony.</title>
 </head>
 <body>
-    <h1>Edycja ustawień strony do odświerzania.</h1>
+    <h1>Edycja ustawień strony do odświeżania.</h1>
     <form id="edit_page" method="post" action="/edit_page/">
         {% csrf_token %}
-        Częstotliwość odświeżania: <input type="number" name="interval" min="1" max="10000" value="{{ refresh_period }}"> sekund
+        Częstotliwość odświeżania: <input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund
         <br/>
-        <input type="checkbox" name="active" value="True" {% if currently_observed %} checked {% endif %}> Obserwuj.
+        <input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}> Obserwuj.
         <br />
         <input type="submit" name="submit" value="Zapisz zmiany" />
     </form>
