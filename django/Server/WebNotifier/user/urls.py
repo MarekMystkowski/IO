@@ -1,4 +1,4 @@
-from WebNotifier.log.views import *
+from WebNotifier.user.views import *
 from django.conf.urls import url
 
 urlpatterns = [

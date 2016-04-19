@@ -19,7 +19,7 @@ from WebNotifier.views import add,edit_page
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^log/', include('WebNotifier.log.urls')),
+    url(r'^user/', include('WebNotifier.user.urls')),
     url(r'^api/', include('WebNotifier.api.urls')),
     url(r'^add/', add),
     url(r'^edit_page/', edit_page),

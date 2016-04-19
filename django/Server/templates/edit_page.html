@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Edycja ustawień strony do odświeżania.</h1>
+    Strona: {{ page_url }}
     <form id="edit_page" method="post" action="/edit_page/">
         {% csrf_token %}
         Częstotliwość odświeżania: <input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund

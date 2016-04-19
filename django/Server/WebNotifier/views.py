@@ -5,11 +5,6 @@ from WebNotifier.models import UserProfile, Page
 import urllib.parse
 
 
-def url_name(url):
-    url_base = urllib.parse.urlsplit(url).geturl()
-    if len(url_base) > 50: url_base = url_base[0:46] + " ..."
-    return url_base
-
 @login_required
 def add(request):
     if request.method != 'POST':
@@ -24,12 +19,15 @@ def add(request):
 
     user_profile = UserProfile.objects.get(user=request.user)
     page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url, login_data=login_data)
+
+
+
     page.save()
 
     request.session['page_id'] = page.id
 
     return render(request, 'edit_page.html', {
-        'login_url': url_name(login_url),
+        'page_url': page_url,
         'interval': '.'.join(str(page.interval).split(',')),
         'active': True,
     })
@@ -58,7 +56,7 @@ def edit_page(request):
     page.save()
 
     return render( request, 'edit_page.html', {
-        'login_url': url_name(page.login_url),
+        'page_url': page.page_url,
         'interval': '.'.join(str(page.interval).split(',')),
         'active': page.active,
     })

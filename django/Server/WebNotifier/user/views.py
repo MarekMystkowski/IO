@@ -1,4 +1,4 @@
-from WebNotifier.log.forms import UserForm
+from WebNotifier.user.forms import UserForm
 from WebNotifier.models import UserProfile
 from django.template import RequestContext
 from django.shortcuts import render_to_response, HttpResponse, HttpResponseRedirect, render
@@ -49,8 +49,8 @@ def user_login(request):
             else:
                 return HttpResponse("Your Rango account is disabled.")
         else:
-            print("Invalid log details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid log details supplied.Erro")
+            print("Invalid user details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid user details supplied.Erro")
 
     else:
         return render(request, 'registration/login.html', {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''})
@@ -58,7 +58,7 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/log/')
+    return HttpResponseRedirect('/user/')
 
 def index(request):
     context = RequestContext(request)

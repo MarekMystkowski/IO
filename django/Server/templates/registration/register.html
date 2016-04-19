@@ -9,10 +9,10 @@
 
         {% if registered %}
             <strong>Dziękujemy za zarejestrowanie.</strong>
-            <a href="/log/">Powrót do log...</a><br />
+            <a href="/user/">Powrót do log...</a><br />
         {% else %}
             <strong>Zarejestruj się</strong><br />
-            <form id="user_form" method="post" action="/log/register/" enctype="multipart/form-data">
+            <form id="user_form" method="post" action="/user/register/" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ user_form.as_p }}
                 <input type="submit" name="submit" value="Register" />
