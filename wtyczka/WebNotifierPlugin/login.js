@@ -27,7 +27,7 @@ function onClick(event) {
         inputs = inputs.map(function (input) {
             return {name: input.name, value: input.value};
         });
-        chrome.runtime.sendMessage("fpdhcnfecnhkghblcjbkfbdimbbhjehe", {
+        chrome.runtime.sendMessage({
             type: "login",
             login_url: document.URL,
             login_data: {inputs: inputs, submit: getPath(elem)}

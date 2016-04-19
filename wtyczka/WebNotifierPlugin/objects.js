@@ -64,7 +64,7 @@ function onKeyDown(event) {
         return;
 
     if ((event.keyCode == 107 || event.keyCode == 187) && element.className != "web-notifier-highlight") { // klawisz +
-        chrome.runtime.sendMessage("fpdhcnfecnhkghblcjbkfbdimbbhjehe", {
+        chrome.runtime.sendMessage({
             type: "add_object",
             object_url: document.URL,
             object_path: getPath(element)}
@@ -73,7 +73,7 @@ function onKeyDown(event) {
 
     } else if ((event.keyCode == 109 || event.keyCode == 189) && element.className == "web-notifier-highlight") { // klawisz -
         element.parentElement.removeChild(element);
-        chrome.runtime.sendMessage("fpdhcnfecnhkghblcjbkfbdimbbhjehe", {
+        chrome.runtime.sendMessage({
             type: "remove_object",
             object_url: document.URL,
             object_path: getPath(element)}
