@@ -66,7 +66,7 @@ function onKeyDown(event) {
     if ((event.keyCode == 107 || event.keyCode == 187) && element.className != "web-notifier-highlight") { // klawisz +
         chrome.runtime.sendMessage({
             type: "add_object",
-            object_url: document.URL,
+            page_url: document.URL,
             object_path: getPath(element)}
         );
         highlightElement(element);
@@ -75,7 +75,7 @@ function onKeyDown(event) {
         element.parentElement.removeChild(element);
         chrome.runtime.sendMessage({
             type: "remove_object",
-            object_url: document.URL,
+            page_url: document.URL,
             object_path: getPath(element)}
         );
     }

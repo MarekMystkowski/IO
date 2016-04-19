@@ -15,6 +15,7 @@ def add(request):
     if request.method != 'POST':
         raise Http404("No POST data found.")
     try:
+        page_url = request.POST['page_url']
         page_data = request.POST['page_data']
         login_url = request.POST['login_url']
         login_data = request.POST['login_data']
@@ -22,7 +23,7 @@ def add(request):
         raise Http404("Not enough POST data found.")
 
     user_profile = UserProfile.objects.get(user=request.user)
-    page = Page(user_profile=user_profile, page_data=page_data, login_url=login_url, login_data=login_data)
+    page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url, login_data=login_data)
     page.save()
 
     request.session['page_id'] = page.id

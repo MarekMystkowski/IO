@@ -25,12 +25,12 @@ function onClick(event) {
     if (elem.type == "submit") {
         inputs = [].slice.apply(document.getElementsByTagName('input')).filter(filter);
         inputs = inputs.map(function (input) {
-            return {name: input.name, value: input.value};
+            return { name: input.name, value: input.value };
         });
         chrome.runtime.sendMessage({
             type: "login",
             login_url: document.URL,
-            login_data: {inputs: inputs, submit: getPath(elem)}
+            login_data: { inputs: inputs, submit: getPath(elem) }
         });
     }
 }
