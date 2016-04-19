@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from WebNotifier.models import UserProfile, Page
+from WebNotifier.models import UserProfile, Page, Device, Change
 import urllib.parse
 
 
@@ -60,3 +60,13 @@ def edit_page(request):
         'interval': '.'.join(str(page.interval).split(',')),
         'active': page.active,
     })
+
+@login_required
+def index(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    pages = Page.objects.all().filter(user_profile=user_profile)
+    devices = Device.objects.all().filter(user=user_profile)
+
+    # TODO : .....
+
+    return  render(request, 'index.html', {})
