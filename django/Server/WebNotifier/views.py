@@ -60,7 +60,7 @@ def index(request):
     max_quantity = 20
     user_profile = UserProfile.objects.get(user=request.user)
     pages = Page.objects.all().filter(user_profile=user_profile)
-    devices = Device.objects.all().filter(user=user_profile)
+    devices = Device.objects.all().filter(user=user_profile).order_by('priority')
 
 
     # Akcje:
@@ -78,14 +78,25 @@ def index(request):
         if request.POST.get('submit_up_device', False):
             device_id = request.POST['device_id']
             device1 = Device.objects.get(id=device_id)
-            device2 = Device.objects.get()
-
+            device2 = Device.objects.get(priority=(device1.priority - 1))
+            device1.priority -= 1
+            device2.priority += 1
+            device1.save()
+            device2.save()
         if request.POST.get('submit_down_device', False):
             device_id = request.POST['device_id']
-
+            device1 = Device.objects.get(id=device_id)
+            device2 = Device.objects.get(priority=(device1.priority + 1))
+            device1.priority += 1
+            device2.priority -= 1
+            device1.save()
+            device2.save()
         if request.POST.get('submit_del_device', False):
             device_id = request.POST['device_id']
             device = Device.objects.get(id=device_id)
+            for dev in Device.objects.all().filter(priority__gt=device.priority):
+                dev.priority -= 1
+                dev.save()
             device.delete()
         if request.POST.get('submit_vis_change', False):
             change = Change.objects.get(id=request.POST['change_id'])
