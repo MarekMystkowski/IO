@@ -2,23 +2,131 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>WebNotifier</title>
 </head>
 <body>
     <div>
-        Witamy w aplikacji do zarządzania odświerzaniem stron.
+        <h1>Witamy w aplikacji do zarządzania odświerzaniem stron.</h1>
     </div>
 
     <div>
-        Ostatnio zarejestrowane zmiany...
+        {% if is_not_shown_change %}
+            <h2>Jeszcze niz zobaczone zmiany.</h2>
+
+            <table>
+                <tr>
+                    <td>adres strony</td>
+                    <td>data zmiany</td>
+                    <td>rezultat</td>
+                    <td>akcje</td>
+                </tr>
+
+                {% for change in not_shown_change %}
+                    <tr>
+                    <form action="" method="post">
+                        <td>{{ change.page }}</td>
+                        <td>{{ change.date }}</td>
+                        <td>{{ change.result }}</td>
+                        <input type="hidden" name="change_id" value="{{ change.id }}">
+                        <td><input type="submit" onclick="window.open('{{ change.page }}')" name="submit_vis_change" value="Zobaczone"></td>
+                    </form>
+                    </tr>
+                {% endfor %}
+            </table>
+            <form action="" method="post">
+                <input type="submit" name="submit_vis_all_change" value="Zobaczone wszystkie">
+            </form>
+        {% else %}
+            <h3>Wszystkie zmiany już zobaczyłeś.</h3>
+        {% endif %}
     </div>
 
     <div>
-        Zarejestrowane strony....
+
+    <div>
+        {% if is_shown_change %}
+            <h2>Zmiany już wyświetlone.</h2>
+
+            <table>
+                <tr>
+                    <td>adres strony</td>
+                    <td>data zmiany</td>
+                    <td>rezultat</td>
+                </tr>
+
+                {% for change in shown_change %}
+                    <tr>
+                        <td>{{ change.page }}</td>
+                        <td>{{ change.date }}</td>
+                        <td>{{ change.result }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% endif %}
     </div>
 
     <div>
-        Twoje urządzenia...
+        {% if is_pages %}
+            <h2>Twoje zarejestrowane strony</h2>
+
+            <table>
+                <tr>
+                    <td>adres strony</td>
+                    <td>częstotliwość</td>
+                    <td>obserwowana</td>
+                    <td>akcje</td>
+                </tr>
+
+                {% for page in pages %}
+                    <tr>
+                    <form action="" method="post">
+                        <td>{{ page.page_url }}</td>
+                        <td><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund </td>
+                        <td><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></td>
+                        <input type="hidden" name="page_id" value="{{ page.id }}">
+                        <td><input type="submit" name="submit_sav_page" value="Zapisz zmiany"><input type="submit" name="submit_del_page" value="Usuń strone"></td>
+                    </form>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <h3>Nie masz aktualnie żadnych zarejestrowanych stron.</h3>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if len_devices != 0 %}
+            <h2>Twoje urządzenia</h2>
+
+            <table>
+                <tr>
+                    <td>nazwa</td>
+                    {% if len_devices > 1 %} <td></td> {% endif %}
+                    <td></td>
+                </tr>
+
+                {% for device, iter in devices_and_iter %}
+                    <form action="" method="post">
+                    <tr>
+                        <td>{{ device.name }}</td>
+                        <input type="hidden" name="device_id" value="{{ device.id }}">
+                        {% if len_devices > 1 %}
+                            <td>
+                                {% if iter != 1 %}<input type="submit" name="submit_up_device" value="Do góry">{% endif %}
+                                {% if iter != len_devices %}<input type="submit" name="submit_down_device" value="W dół">{% endif %}
+                            </td>
+                        {% endif %}
+                        <td><input type="submit" name="submit_del_device" value="Usuń"></td>
+                    </tr>
+                    </form>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <h3>Nie masz aktualnie żadnych dodanych urządzeń.</h3>
+        {% endif %}
+
     </div>
 
 </body>

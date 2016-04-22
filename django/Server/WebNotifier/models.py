@@ -50,4 +50,4 @@ class Change(models.Model):
     result = models.TextField()
 
     def __str__(self):
-        return self.page.url + ': ' + self.result
+        return self.page.page_url + ': ' + self.result

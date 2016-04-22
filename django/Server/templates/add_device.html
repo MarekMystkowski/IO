@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodanie urządzenia</title>
+</head>
+<body>
+    <h1>Dodaj nowe urządzenie.</h1>
+    <form id="add_device" method="post" action="/add_device/">
+        nazwa: <input type="text" name="name" maxlength="50">
+        <br>
+        Proritet ustalisz na głównej stronie.
+        <input type="hidden" name="device_id" value="{{ device_id }}">
+        <input type="hidden" name="of_page" value="True">
+        <input type="submit" name="submit" value="Dodaj" />
+    </form>
+</body>
+</html>

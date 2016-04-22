@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from WebNotifier.views import add, edit_page, index
+from WebNotifier.views import add_page, index, add_device
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include('WebNotifier.user.urls')),
     url(r'^api/', include('WebNotifier.api.urls')),
-    url(r'^add/', add),
-    url(r'^edit_page/', edit_page),
+    url(r'^add/', add_page),
+    url(r'^add_device/', add_device),
     url(r'^$', index)
 
 ]
