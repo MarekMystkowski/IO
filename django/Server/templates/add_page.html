@@ -7,13 +7,12 @@
 <body>
     <h1>Ustaw parametry dla nowej strony.</h1>
     Strona: {{ page_url }}
-    <form id="edit_page" method="post" action="/edit_page/">
+    <form id="edit_page" method="post">
         {% csrf_token %}
         Częstotliwość odświeżania: <input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund
         <br/>
         <input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}> Obserwuj.
         <br />
-        <input type="hidden" name="of_page" value="True">
         <input type="submit" name="submit" value="Zapisz zmiany" />
     </form>
 </body>

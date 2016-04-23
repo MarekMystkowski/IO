@@ -22,26 +22,28 @@ def edit_page(request):
         page_data = request.session['page_data']
         login_url = request.session['login_url']
         login_data = request.session['login_data']
-        page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url,
-                    login_data=login_data)
+        page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url, login_data=login_data)
         page.save()
+
+        request.session['page_id'] = page.id
 
         return render(request, 'add_page.html', {
             'page_url': page_url,
-            'interval': '.'.join(str(page.interval).split(',')),
-            'active': True,
-            'page_id': page.id
+            'interval': page.interval,
+            'active': True
         })
 
     if request.method == 'POST':
         try:
-            page = Page.objects.get(id=request.POST['page_id'])
-            page.interval = int(float(request.POST['interval']))
+            page = Page.objects.get(id=request.session['page_id'])
+            page.interval = request.POST['interval']
             page.active = False
             if request.POST['active'] == 'True':
                 page.active = True
             page.save()
-        except KeyError: pass
+        except KeyError:
+            pass
+
     return HttpResponseRedirect('/')
 
 

@@ -42,11 +42,12 @@ function action_stop() {
         })
     });
     state = "login_ask";
+    page_data = {};
+    login_url = "";
+    login_data = {};
 }
 
 function action_save() {
-    action_stop();
-
     // prześlij dane na serwer
     var url = "data:text/html;charset=utf8,";
     function append(key, value) {
@@ -66,6 +67,8 @@ function action_save() {
     url += encodeURIComponent(form.outerHTML);
     url += encodeURIComponent('<script>document.forms[0].submit();</script>');
     chrome.tabs.create({url: url, active: true});
+
+    action_stop();
 }
 
 
