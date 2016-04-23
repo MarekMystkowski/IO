@@ -1,12 +1,6 @@
-import random
-import string
-import socket
-import os
-import threading
-import time
-import requests
-import webbrowser
-import AdvancedHTMLParser
+import random, string, json
+import socket, os, time, threading
+import requests, AdvancedHTMLParser
 
 def parse(html):
     parser = AdvancedHTMLParser.IndexedAdvancedHTMLParser()
@@ -16,19 +10,18 @@ def parse(html):
 
 class Page:
     title = ''
-    page_url = ''
-    object_paths = []
+    url = ''
+    paths = []
     interval = 60 # sekund
     login_url = ''
     login_data = {}
-    login_submit = []
     session = None
     thread = None
 
-    def __init__(self, page_url, objects, interval=None, login_url=None, login_data=None, login_submit=None):
+    def __init__(self, url, paths, interval=None, login_url=None, login_data=None, login_submit=None):
         self.session = requests.session()
-        self.page_url = page_url
-        self.objects = objects
+        self.url = url
+        self.paths = paths
         if interval is not None:
             self.interval = interval
         if login_url is not None:
@@ -46,31 +39,27 @@ class Page:
             for input in parser.getElementsByTagName('input'):
                 if input.getAttribute('type') == 'hidden':
                     data[input.getAttribute('name')] = input.getAttribute('value')
-            self.session.post(self.login_url, data=data)
+            self.session.post(self.login_url, data)
 
     def get_objects(self):
-        r = self.session.get(self.page_url)
+        r = self.session.get(self.url)
         parser = parse(r.text)
         self.title = parser.getElementsByTagName('title')[0].innerHTML
         doc = parser.getRoot()
         objs = []
-        for obj_path in self.objects:
+        for obj_path in self.paths:
             e = doc
+            prev_tag = e.tagName
             for index in obj_path:
-                e = e.getChildren()[index]
+                # pomijamy dodawany przez przeglądarki znacznik tbody
+                ignore = False
+                if prev_tag == 'table' and e.tagName != 'tbody' and e.tagName != 'thead':
+                    ignore = True
+                prev_tag = e.tagName
+                if not ignore:
+                    e = e.getChildren()[index]
             objs.append(e.innerHTML)
         return objs
-
-
-pages = [
-    #Page('https://usosweb.mimuw.edu.pl/kontroler.php?_action=dla_stud/studia/sprawdziany/pokaz&wez_id=86594',
-    #     [[1, 1, 2, 0, 1, 0, 0, 0, 7, 1, 4, 0, 2, 0]],  # ocena z kartkówki z sieci
-    #     30,
-    #     'https://logowanie.uw.edu.pl/cas/login?service=https%3A%2F%2Fusosweb.mimuw.edu.pl%2Fkontroler.php%3F_action%3Dlogowaniecas%2Findex&locale=pl',
-    #     {'username': '123456789', 'password': 'qwerty'}),
-    Page('http://frazpc.pl',
-         [[1, 7, 1, 0, 0, 0, 2, 1, 0, 0, 0], [1, 7, 1, 0, 0, 0, 2, 1, 1, 0, 0]], # nagłówki dwóch pierwszych artykułów
-         20)]
 
 
 def worker(page):
@@ -80,11 +69,11 @@ def worker(page):
     while working:
         time.sleep(page.interval)
         new_objs = page.get_objects()
-        for i in range(len(objs)):
-            if objs[i] != new_objs[i]:
-                print('Zmiana na stronie "' + page.title + '": ' + objs[i] + ' -> ' + new_objs[i])
+        #for i in range(len(objs)):
+        #    if objs[i] != new_objs[i]:
+        #        print('Zmiana na stronie "' + page.title + '": ' + objs[i] + ' -> ' + new_objs[i])
         objs = new_objs
-        #print(objs) # wyświetla aktualne wartości obiektów
+        print(objs) # wyświetla aktualne wartości obiektów
 
 
 # id urządzenia
@@ -98,7 +87,11 @@ except FileNotFoundError:
     # to działa chyba tylko na Windowsie, ale webbrowser.open ma jakiś problem i otwiera stronę w IE zamiast w Chromie
     os.startfile('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
 
-exit()
+
+# pobranie listy stron
+r = requests.post('http://127.0.0.1:8000/api/page_list/', {'device_id': device_id})
+pages = [Page(d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
+
 
 # wątki do obserwowania stron
 for page in pages:

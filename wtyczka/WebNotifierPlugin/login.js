@@ -1,15 +1,4 @@
 
-// pobiera ścieżkę elementu
-function getPath(elem) {
-    var result = [];
-    while (elem.parentElement != null) {
-        var index = [].indexOf.call(elem.parentElement.children, elem);
-        result.push(index);
-        elem = elem.parentElement;
-    }
-    return result.reverse();
-}
-
 // filtruje pola do wysłania na serwer
 function filter(input) {
     if (input.type == 'hidden' || input.type == 'submit')
@@ -24,13 +13,14 @@ function onClick(event) {
     var elem = event.target;
     if (elem.type == "submit") {
         inputs = [].slice.apply(document.getElementsByTagName('input')).filter(filter);
-        inputs = inputs.map(function (input) {
-            return { name: input.name, value: input.value };
+        var input_data = {};
+        inputs.forEach(function (input) {
+            input_data[input.name] = input.value;
         });
         chrome.runtime.sendMessage({
             type: "login",
             login_url: document.URL,
-            login_data: { inputs: inputs, submit: getPath(elem) }
+            login_data: input_data
         });
     }
 }

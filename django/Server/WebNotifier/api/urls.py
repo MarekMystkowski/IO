@@ -1,5 +1,6 @@
 from django.conf.urls import url
+from WebNotifier.api.views import *
 
 urlpatterns = [
-    # szablony linków do API.
+    url(r'^page_list/$', page_list),
 ]
