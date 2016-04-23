@@ -15,14 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from WebNotifier.views import add_page, index, add_device
+from WebNotifier.views import add_page, edit_page, index, add_device, edit_device
+from WebNotifier.user.views import index as login
+from WebNotifier.user.views import user_logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^user/', include('WebNotifier.user.urls')),
     url(r'^api/', include('WebNotifier.api.urls')),
-    url(r'^add/', add_page),
-    url(r'^add_device/', add_device),
-    url(r'^$', index)
-
+    url(r'^add_page/', add_page),     # techniczny dla wtyczki
+    url(r'^edit_page/', edit_page),   # do wprowadzenie pierwszych danych
+    url(r'^add_device/', add_device), # techniczny dla odświerzaczki
+    url(r'^edit_device/', edit_device),  # do wprowadzenie pierwszych danych
+    url(r'^$', index),
+    url(r'^login/$', login),
+    url(r'^logout/$', user_logout)
 ]
