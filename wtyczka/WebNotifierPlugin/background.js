@@ -57,7 +57,7 @@ function action_save() {
     }
     var form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'http://127.0.0.1:8000/add/';
+    form.action = 'http://127.0.0.1:8000/add_page/';
     var page_url = Object.keys(page_data)[0];
     append('page_url', page_url);
     append('page_data', JSON.stringify(page_data[page_url]));

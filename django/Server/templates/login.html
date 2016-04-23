@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Logowanie</title>
+    </head>
+
+    <body>
+        <div>
+            <h1>Zaloguj się lub zarejestruj.</h1>
+        </div>
+
+        <div>
+            {% if error %}
+            <div>
+                {{ error }}
+            </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <h2>Logowanie</h2>
+            <form id="login_form" method="post" action="/login/">
+                Login: <input type="text" name="username" value="" size="50" />
+                <br />
+                Hasło: <input type="password" name="password" value="" size="50" />
+                <br />
+                <input type="hidden" name ="next" value="{{ next }}"/>
+                <input type="submit" name="submit_login" value="Zaloguj" />
+            </form>
+        </div>
+
+        <div>
+            <h2>Rejestrowanie</h2>
+            <form id="register_form" method="post" action="/login/">
+                {{ user_form.as_p }}
+                <input type="hidden" name ="next" value="{{ next }}"/>
+                <input type="submit" name="submit_register" value="Register" />
+            </form>
+        </div>
+    </body>
+</html>
