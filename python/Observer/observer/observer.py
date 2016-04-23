@@ -1,6 +1,11 @@
+import random
+import string
+import socket
+import os
 import threading
 import time
 import requests
+import webbrowser
 import AdvancedHTMLParser
 
 def parse(html):
@@ -58,11 +63,11 @@ class Page:
 
 
 pages = [
-    Page('https://usosweb.mimuw.edu.pl/kontroler.php?_action=dla_stud/studia/sprawdziany/pokaz&wez_id=86594',
-         [[1, 1, 2, 0, 1, 0, 0, 0, 7, 1, 4, 0, 2, 0]], # ocena z kartkówki z sieci
-         30,
-         'https://logowanie.uw.edu.pl/cas/login?service=https%3A%2F%2Fusosweb.mimuw.edu.pl%2Fkontroler.php%3F_action%3Dlogowaniecas%2Findex&locale=pl',
-         {'username': '123456789', 'password': 'qwerty'}),
+    #Page('https://usosweb.mimuw.edu.pl/kontroler.php?_action=dla_stud/studia/sprawdziany/pokaz&wez_id=86594',
+    #     [[1, 1, 2, 0, 1, 0, 0, 0, 7, 1, 4, 0, 2, 0]],  # ocena z kartkówki z sieci
+    #     30,
+    #     'https://logowanie.uw.edu.pl/cas/login?service=https%3A%2F%2Fusosweb.mimuw.edu.pl%2Fkontroler.php%3F_action%3Dlogowaniecas%2Findex&locale=pl',
+    #     {'username': '123456789', 'password': 'qwerty'}),
     Page('http://frazpc.pl',
          [[1, 7, 1, 0, 0, 0, 2, 1, 0, 0, 0], [1, 7, 1, 0, 0, 0, 2, 1, 1, 0, 0]], # nagłówki dwóch pierwszych artykułów
          20)]
@@ -82,6 +87,20 @@ def worker(page):
         #print(objs) # wyświetla aktualne wartości obiektów
 
 
+# id urządzenia
+try:
+    f = open('device_id', 'r')
+    device_id = f.read()
+except FileNotFoundError:
+    device_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(32))
+    with open('device_id', 'w') as f:
+        f.write(device_id)
+    # to działa chyba tylko na Windowsie, ale webbrowser.open ma jakiś problem i otwiera stronę w IE zamiast w Chromie
+    os.startfile('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
+
+exit()
+
+# wątki do obserwowania stron
 for page in pages:
     page.thread = threading.Thread(target=worker, args=(page,))
     page.thread.start()

@@ -2,3 +2,4 @@
 *.iml
 *.pyc
 *.pyc
+django/Server/db.sqlite3

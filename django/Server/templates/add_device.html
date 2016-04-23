@@ -5,11 +5,10 @@
     <title>Dodanie urządzenia</title>
 </head>
 <body>
-    <h1>Dodaj nowe urządzenie.</h1>
+    <h1>Nowe urządzenie.</h1>
     <form id="edit_device" method="post" action="/edit_device/">
-        nazwa: <input type="text" name="name" maxlength="50">
-        <br>
-        Proritet ustalisz na głównej stronie.
+        Nazwa: <input type="text" name="name" maxlength="50" value="{{ device_name }}"><br/>
+        Prorytet ustalisz na stronie głównej.
         <input type="hidden" name="device_id" value="{{ device_id }}">
         <input type="submit" name="submit" value="Dodaj" />
     </form>

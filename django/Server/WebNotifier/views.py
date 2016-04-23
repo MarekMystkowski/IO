@@ -120,8 +120,8 @@ def index(request):
 def add_device(request):
     try:
         request.session['new_device'] = True
-        for name in ['device_id']:
-            request.session[name] = request.POST[name]
+        for name in ['device_id', 'device_name']:
+            request.session[name] = request.GET[name]
     except:
         request.session['new_device'] = False
         return HttpResponseRedirect('/')
@@ -133,16 +133,17 @@ def edit_device(request):
     if request.session['new_device']:
         request.session['new_device'] = False
         device_id = request.session['device_id']
+        device_name = request.session['device_name']
         if device_id == "":
             return HttpResponseRedirect('/')
-        return render(request, 'edit_device.html', {'device_id': device_id})
+        return render(request, 'add_device.html', {'device_id': device_id, 'device_name': device_name})
 
     if request.method == 'POST':
         device_id = request.POST.get('device_id', '')
         if device_id == "":
             return HttpResponseRedirect('/')
-        name = request.POST.get('name', 'nowa nazwa')
-        prio = len(Device.objects.all().filter(user_profile=user_profile)) + 1
+        name = request.POST.get('name', 'New Device')
+        prio = len(Device.objects.filter(user=user_profile)) + 1
         Device(id=device_id, name=name, priority=prio, user=user_profile).save()
         return HttpResponseRedirect('/')
 

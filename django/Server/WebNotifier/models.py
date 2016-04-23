@@ -20,7 +20,7 @@ class UserProfile(models.Model):
 
 
 class Device(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(primary_key=True, max_length=32)
     name = models.CharField(max_length=50)
     user = models.ForeignKey(UserProfile)
     priority = models.IntegerField()
