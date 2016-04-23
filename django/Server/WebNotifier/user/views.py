@@ -10,6 +10,8 @@ def index(request):
         next_page = request.POST['next']
     except:
         next_page = "/"
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(next_page)
     error = ""
     if request.method == 'POST':
         if request.POST.get('submit_login', False):
