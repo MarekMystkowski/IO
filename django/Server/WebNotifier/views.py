@@ -25,9 +25,8 @@ def edit_page(request):
         page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url, login_data=login_data)
         page.save()
 
-        request.session['page_id'] = page.id
-
-        return render(request, 'add_page.html', {
+        return render(request, 'edit_page.html', {
+            'page_id': page.id,
             'page_url': page_url,
             'interval': page.interval,
             'active': True
@@ -35,7 +34,7 @@ def edit_page(request):
 
     if request.method == 'POST':
         try:
-            page = Page.objects.get(id=request.session['page_id'])
+            page = Page.objects.get(id=request.POST['page_id'])
             page.interval = request.POST['interval']
             page.active = False
             if request.POST['active'] == 'True':
@@ -138,7 +137,7 @@ def edit_device(request):
         device_name = request.session['device_name']
         if device_id == "":
             return HttpResponseRedirect('/')
-        return render(request, 'add_device.html', {'device_id': device_id, 'device_name': device_name})
+        return render(request, 'edit_device.html', {'device_id': device_id, 'device_name': device_name})
 
     if request.method == 'POST':
         device_id = request.POST.get('device_id', '')

@@ -13,6 +13,7 @@
         <br/>
         <input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}> Obserwuj.
         <br />
+        <input type="hidden" name="page_id" value="{{ page_id }}">
         <input type="submit" name="submit" value="Zapisz zmiany" />
     </form>
 </body>
