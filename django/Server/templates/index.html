@@ -2,7 +2,9 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <title>Web Notifier</title>
     {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}" />
 </head>
 <body>
@@ -19,9 +21,9 @@
             <h1>Zarządzaj swoimi <br> stronami do obserwowania</h1>
         </div>
 
-        <div id="data_in_tables">
+        <div id="tables">
             <div id="new_changes">
-                {% if is_not_shown_change %}
+                {% if new_changes %}
                     <h2>Jeszcze niz zobaczone zmiany</h2>
 
                     <div id="table">
@@ -32,7 +34,7 @@
                             <div id="td">Zobacz /<br>potwierdź</div>
                         </div>
 
-                        {% for change in not_shown_change %}
+                        {% for change in new_changes %}
                             <form id="tr" action="" method="post">
                                 <div id="td">{{ change.page }}</div>
                                 <div id="td">{{ change.date }}</div>
@@ -54,7 +56,7 @@
             </div>
 
             <div id="old_change">
-                {% if is_shown_change %}
+                {% if old_changes %}
                     <h2>Zmiany już wyświetlone.</h2>
 
                     <div id="table">
@@ -64,7 +66,7 @@
                             <div id="td">rezultat</div>
                         </div>
 
-                        {% for change in shown_change %}
+                        {% for change in old_changes %}
                             <div id="tr">
                                 <div id="td">{{ change.page }}</div>
                                 <div id="td">{{ change.date.date }}<br>{{ change.date.time }}</div>
@@ -88,7 +90,7 @@
                         {% for page in pages %}
                             <form id="tr" action="" method="post">
                                 <div id="td">{{ page.page_url }}</div>
-                                <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund </div>
+                                <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}">sekund </div>
                                 <div id="td"><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></div>
                                 <input type="hidden" name="page_id" value="{{ page.id }}">
                                 <div id="td">

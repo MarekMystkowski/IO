@@ -1,16 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Dodanie urządzenia</title>
+    <title>Dodawanie urządzenia</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
 </head>
 <body>
-    <h1>Nowe urządzenie.</h1>
-    <form id="edit_device" method="post">
-        Nazwa: <input type="text" name="name" maxlength="50" value="{{ device_name }}"><br/>
-        Prorytet ustalisz na stronie głównej.
-        <input type="hidden" name="device_id" value="{{ device_id }}">
-        <input type="submit" name="submit" value="Dodaj" />
-    </form>
+    <div id="top">
+        <div id="logo">
+            <img src="{% static "WebNotifier.png" %}">
+        </div>
+    </div>
+    <div id="content">
+        <div id="title">
+            <h1>Dodawanie nowego urządzenia</h1>
+        </div>
+        <div id="tables">
+            <div id="edit_device">
+                <h2>Ustaw nazwę dla nowego urządzenia.</h2>
+                <form id="table" method="post">
+                    <div id="tr">
+                        <div id="td">Nazwa: </div>
+                        <div id="td"><input type="text" name="name" maxlength="50" value="{{ device_name }}"></div>
+                    </div>
+                    <div id="tr">
+                        <div id="td">Prorytet: </div>
+                        <div id="td">Można go ustawić na głównej stronie.</div>
+                    </div>
+                    <input type="hidden" name="device_id" value="{{ device_id }}">
+                    <input type="submit" name="submit" value="Dodaj" />
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

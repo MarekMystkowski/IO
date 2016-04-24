@@ -1,20 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Dodawanie strony.</title>
+    <title>Dodawanie strony</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+     <link rel="stylesheet" type="text/css" href="{% static 'edit_page.css' %}" />
 </head>
 <body>
-    <h1>Ustaw parametry dla nowej strony.</h1>
-    Strona: {{ page_url }}
-    <form id="edit_page" method="post">
-        {% csrf_token %}
-        Częstotliwość odświeżania: <input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund
-        <br/>
-        <input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}> Obserwuj.
-        <br />
-        <input type="hidden" name="page_id" value="{{ page_id }}">
-        <input type="submit" name="submit" value="Zapisz zmiany" />
-    </form>
+    <div id="top">
+        <div id="logo">
+            <img src="{% static "WebNotifier.png" %}">
+        </div>
+    </div>
+    <div id="content">
+        <div id="title">
+            <h1>Dodawanie nowej strony</h1>
+        </div>
+
+        <div id="tables">
+            <div id="edit_page">
+                <h2>Ustaw parametry dla nowej strony</h2>
+                <form id="table" method="post">
+                    <div id="tr">
+                        <div id="td">Strona: </div>
+                        <div id="td">{{ page_url }}</div>
+                    </div>
+                    <div id="tr">
+                        <div id="td">Częstotliwość: </div>
+                        <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund</div>
+                    </div>
+                    <div id="tr">
+                        <div id="td">Obserwuj: </div>
+                        <div id="td"><input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}></div>
+                    </div>
+
+                    <input type="hidden" name="page_id" value="{{ page_id }}">
+                    <input type="submit" name="submit" value="Zapisz zmiany" />
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

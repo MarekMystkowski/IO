@@ -1,40 +1,67 @@
-<html>
-    <head>
-        <title>Logowanie</title>
-    </head>
-
-    <body>
-        <div>
-            <h1>Zaloguj się lub zarejestruj.</h1>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+</head>
+<body>
+    <div id="top">
+        <div id="logo">
+            <img src="{% static "WebNotifier.png" %}">
+        </div>
+    </div>
+    <div id="content">
+        <div id="title">
+            <h1>Zaloguj się lub zarejestruj</h1>
         </div>
 
-        <div>
-            {% if error %}
-            <div>
-                {{ error }}
+        {% if error %}
+            <div id="messages">
+                <h2>Błąd:</h2>
+                <div>{{ error }}</div>
             </div>
-            {% endif %}
-        </div>
+        {% endif %}
 
-        <div>
-            <h2>Logowanie</h2>
-            <form id="login_form" method="post" action="/login/">
-                Login: <input type="text" name="username" value="" size="50" />
-                <br />
-                Hasło: <input type="password" name="password" value="" size="50" />
-                <br />
-                <input type="hidden" name ="next" value="{{ next }}"/>
-                <input type="submit" name="submit_login" value="Zaloguj" />
-            </form>
-        </div>
+        <div id="tables">
+            <div id="login">
+                <h2>Logowanie</h2>
+                <form id="table" method="post" action="/login/">
+                    <div id="tr">
+                        <div id="td">Login: </div>
+                        <div id="td"><input type="text" name="username" maxlength="30"></div>
+                    </div>
 
-        <div>
-            <h2>Rejestrowanie</h2>
-            <form id="register_form" method="post" action="/login/">
-                {{ user_form.as_p }}
-                <input type="hidden" name ="next" value="{{ next }}"/>
-                <input type="submit" name="submit_register" value="Register" />
-            </form>
+                    <div id="tr">
+                        <div id="td">Hasło: </div>
+                        <div id="td"><input type="password" name="password" type="password" ></div>
+                    </div>
+                    <input type="hidden" name ="next" value="{{ next }}"/>
+                    <input type="submit" name="submit_login" value="Zaloguj" />
+                </form>
+            </div>
+
+            <div id="register">
+                <h2>Rejestrowanie</h2>
+                <form id="table" method="post" action="/login/">
+                    <div id="tr">
+                        <div id="td">Login: </div>
+                        <div id="td"><input id="id_username" maxlength="30" name="username" type="text"></div>
+                    </div>
+                    <div id="tr">
+                        <div id="td">Email:</div>
+                        <div id="td"><input id="id_email" maxlength="254" name="email" type="email"></div>
+                    </div>
+                    <div id="tr">
+                        <div id="td">Hasło:</div>
+                        <div id="td"><input id="id_password" name="password" type="password" ></div>
+                    </div>
+                    <input type="hidden" name ="next" value="{{ next }}"/>
+                    <input type="submit" name="submit_register" value="Register" />
+                </form>
+            </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

@@ -1,0 +1,9 @@
+/* Dostosowanie tabel (dane liczbowe w input od prawej)*/
+
+div#edit_page >form#table > div#tr:nth-child(2) > div#td >input{
+    text-align: right;
+    width: 60px;
+}
+div#edit_page >form#table > div#tr:nth-child(3) > div#td:nth-child(2){
+    text-align: left;
+}

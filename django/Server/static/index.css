@@ -1,49 +1,4 @@
-div#logo {
-    text-align: center;
-}
-
-div#logout {
-    text-align: right;
-    padding: 1% 2% 0;
-}
-
-div#title {
-    text-align: center;
-}
-
-div#title>h1 {
-    color: #314060;
-    font-family: Comic Sans MS;
-    font-weight: 900;
-}
-
-div#data_in_tables >div >h2 {
-    color: #69291a;
-    font-weight: 700;
-}
-
-
-/* Ukłąd standardowej tabeli*/
-div#tr {
-    display: table-row;
-}
-form#tr {
-    display: table-row;
-}
-
-div#td {
-    padding: 1% 5px 0;
-    display: table-cell;
-    text-align: center;
-    border:1px solid #eeeee6;
-}
-
-div#table > div:nth-child(1) {
-    background-color:  #eeeee6;
-    font-weight:bold;
-}
-
-/* Wyrównanie wartosći w odpowiednich tabelach  */
+/* Dostosowanie tabel (adres do lewej, dane liczbowe w input od prawej)*/
 div#old_change > div#table >div#tr > div#td:nth-child(1) {
     text-align: left;
 }
@@ -56,31 +11,4 @@ div#pages > div#table >form#tr > div#td:nth-child(1) {
 div#pages > div#table >form#tr > div#td:nth-child(2) >input {
     text-align: right;
     width: 60px;
-}
-
-
-
-/* Przyciski */
-.button_up {
-    background: url(/static/button_up.png) no-repeat ;
-    width: 24px;
-    height: 24px;
-}
-
-.button_down {
-    background: url(/static/button_down.png) no-repeat ;
-    width: 24px;
-    height: 24px;
-}
-
-.button_delete {
-    background: url(/static/button_delete.png) no-repeat ;
-    width: 24px;
-    height: 24px;
-}
-
-.button_save {
-    background: url(/static/button_save.png) no-repeat ;
-    width: 24px;
-    height: 24px;
 }
