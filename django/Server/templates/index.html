@@ -2,133 +2,139 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}" />
 </head>
 <body>
-    <div>
-        <a href="/logout">wyloguj</a>
+    <div id="top">
+        <div id="logout">
+            <a href="logout"><img src="{% static "wyloguj.png" %}" alt="wyloguj"></a>
+        </div>
+        <div id="logo">
+            <img src="{% static "WebNotifier.png" %}">
+        </div>
     </div>
-    <div>
-        <h1>Witamy w aplikacji do zarządzania obserwowanymi stronami.</h1>
+    <div id="content">
+        <div id="title">
+            <h1>Zarządzaj swoimi <br> stronami do obserwowania</h1>
+        </div>
+
+        <div id="data_in_tables">
+            <div id="new_changes">
+                {% if is_not_shown_change %}
+                    <h2>Jeszcze niz zobaczone zmiany</h2>
+
+                    <div id="table">
+                        <div id="tr">
+                            <div id="td">adres strony</div>
+                            <div id="td">data zmiany</div>
+                            <div id="td">rezultat</div>
+                            <div id="td">Zobacz /<br>potwierdź</div>
+                        </div>
+
+                        {% for change in not_shown_change %}
+                            <form id="tr" action="" method="post">
+                                <div id="td">{{ change.page }}</div>
+                                <div id="td">{{ change.date }}</div>
+                                <div id="td">{{ change.result }}</div>
+                                <input type="hidden" name="change_id" value="{{ change.id }}">
+                                <div id="td"><input type="submit" onclick="window.open('{{ change.page }}')"
+                                                    name="submit_vis_change" class="button_save" value=" "></div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                    <div id="vis_all_change">
+                        <form action="" method="post">
+                            <input type="submit" name="submit_vis_all_change" value="Potwierdź wszystkie">
+                        </form>
+                    </div>
+                {% else %}
+                    <h2>Wszystkie zmiany już zobaczyłeś.</h2>
+                {% endif %}
+            </div>
+
+            <div id="old_change">
+                {% if is_shown_change %}
+                    <h2>Zmiany już wyświetlone.</h2>
+
+                    <div id="table">
+                        <div id="tr">
+                            <div id="td">adres strony</div>
+                            <div id="td">data zmiany</div>
+                            <div id="td">rezultat</div>
+                        </div>
+
+                        {% for change in shown_change %}
+                            <div id="tr">
+                                <div id="td">{{ change.page }}</div>
+                                <div id="td">{{ change.date.date }}<br>{{ change.date.time }}</div>
+                                <div id="td">{{ change.result }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="pages">
+                {% if is_pages %}
+                    <h2>Twoje zarejestrowane strony</h2>
+                    <div id="table">
+                        <div id="tr">
+                            <div id="td">adres strony</div>
+                            <div id="td">częstotliwość</div>
+                            <div id="td">obserwuj</div>
+                            <div id="td">akcje</div>
+                        </div>
+                        {% for page in pages %}
+                            <form id="tr" action="" method="post">
+                                <div id="td">{{ page.page_url }}</div>
+                                <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund </div>
+                                <div id="td"><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></div>
+                                <input type="hidden" name="page_id" value="{{ page.id }}">
+                                <div id="td">
+                                    <input type="submit" name="submit_sav_page" class="button_save" value=" ">
+                                    <input type="submit" name="submit_del_page" class="button_delete" value=" ">
+                                </div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h2>Nie masz aktualnie żadnych zarejestrowanych stron.</h2>
+                {% endif %}
+            </div>
+
+            <div id="devices">
+                {% if len_devices != 0 %}
+                    <h2>Twoje urządzenia</h2>
+                    <div id="table">
+                        <div id="tr">
+                            <div id="td">nazwa</div>
+                            {% if len_devices > 1 %} <div id="td"></div> {% endif %}
+                            <div id="td"></div>
+                        </div>
+                        {% for device, iter in devices_and_iter %}
+                            <form id="tr" action="" method="post">
+                                <div id="td">{{ device.name }}</div>
+                                <input type="hidden" name="device_id" value="{{ device.id }}">
+                                {% if len_devices > 1 %}
+                                    <div id="td">
+                                        {% if iter != 1 %}
+                                            <input type="submit" class="button_up" name="submit_up_device" value=" " /><br>
+                                        {% endif %}
+                                        {% if iter != len_devices %}
+                                            <input type="submit" class="button_down" name="submit_down_device" value=" " />
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                <div id="td"><input type="submit" class="button_delete" name="submit_del_device" value=" "></div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h2>Nie masz aktualnie żadnych dodanych urządzeń.</h2>
+                {% endif %}
+            </div>
+        </div>
     </div>
-
-    <div>
-        {% if is_not_shown_change %}
-            <h2>Jeszcze niz zobaczone zmiany.</h2>
-
-            <table>
-                <tr>
-                    <td>adres strony</td>
-                    <td>data zmiany</td>
-                    <td>rezultat</td>
-                    <td>akcje</td>
-                </tr>
-
-                {% for change in not_shown_change %}
-                    <tr>
-                    <form action="" method="post">
-                        <td>{{ change.page }}</td>
-                        <td>{{ change.date }}</td>
-                        <td>{{ change.result }}</td>
-                        <input type="hidden" name="change_id" value="{{ change.id }}">
-                        <td><input type="submit" onclick="window.open('{{ change.page }}')" name="submit_vis_change" value="Potwierdź"></td>
-                    </form>
-                    </tr>
-                {% endfor %}
-            </table>
-            <form action="" method="post">
-                <input type="submit" name="submit_vis_all_change" value="Potwierdź wszystkie">
-            </form>
-        {% else %}
-            <h3>Wszystkie zmiany już zobaczyłeś.</h3>
-        {% endif %}
-    </div>
-
-    <div>
-        {% if is_shown_change %}
-            <h2>Zmiany już wyświetlone.</h2>
-
-            <table>
-                <tr>
-                    <td>adres strony</td>
-                    <td>data zmiany</td>
-                    <td>rezultat</td>
-                </tr>
-
-                {% for change in shown_change %}
-                    <tr>
-                        <td>{{ change.page }}</td>
-                        <td>{{ change.date }}</td>
-                        <td>{{ change.result }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-
-        {% endif %}
-    </div>
-
-    <div>
-        {% if is_pages %}
-            <h2>Twoje zarejestrowane strony</h2>
-
-            <table>
-                <tr>
-                    <td>adres strony</td>
-                    <td>częstotliwość</td>
-                    <td>obserwowana</td>
-                    <td>akcje</td>
-                </tr>
-
-                {% for page in pages %}
-                    <tr>
-                    <form action="" method="post">
-                        <td>{{ page.page_url }}</td>
-                        <td><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund </td>
-                        <td><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></td>
-                        <input type="hidden" name="page_id" value="{{ page.id }}">
-                        <td><input type="submit" name="submit_sav_page" value="Zapisz zmiany"><input type="submit" name="submit_del_page" value="Usuń stronę"></td>
-                    </form>
-                    </tr>
-                {% endfor %}
-            </table>
-
-        {% else %}
-            <h3>Nie masz aktualnie żadnych zarejestrowanych stron.</h3>
-        {% endif %}
-    </div>
-
-    <div>
-        {% if len_devices != 0 %}
-            <h2>Twoje urządzenia</h2>
-
-            <table>
-                <tr>
-                    <td>nazwa</td>
-                    {% if len_devices > 1 %} <td></td> {% endif %}
-                    <td></td>
-                </tr>
-
-                {% for device, iter in devices_and_iter %}
-                    <form action="" method="post">
-                    <tr>
-                        <td>{{ device.name }}</td>
-                        <input type="hidden" name="device_id" value="{{ device.id }}">
-                        {% if len_devices > 1 %}
-                            <td>
-                                {% if iter != 1 %}<input type="submit" name="submit_up_device" value="Do góry">{% endif %}
-                                {% if iter != len_devices %}<input type="submit" name="submit_down_device" value="W dół">{% endif %}
-                            </td>
-                        {% endif %}
-                        <td><input type="submit" name="submit_del_device" value="Usuń"></td>
-                    </tr>
-                    </form>
-                {% endfor %}
-            </table>
-
-        {% else %}
-            <h3>Nie masz aktualnie żadnych dodanych urządzeń.</h3>
-        {% endif %}
-
-    </div>
-
 </body>
 </html>
