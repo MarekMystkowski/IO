@@ -63,7 +63,10 @@ class Page:
                     ignore = True
                 prev_tag = e.tagName
                 if not ignore:
-                    e = e.getChildren()[index]
+                    children = e.getChildren()
+                    if len(children) <= index:
+                        return None # błąd!
+                    e = children[index]
             objs.append(e.innerHTML)
         return objs
 
@@ -77,12 +80,17 @@ class Page:
 
 
 def worker(page):
-    page.login() # TODO: obsługa wylogowania
+    page.login()
     objs = page.get_objects()
     working = True
     while working:
         time.sleep(page.interval)
         new_objs = page.get_objects()
+        # w przypadku wykrycia zmiany (albo błędu) logujemy się ponownie
+        if objs != new_objs:
+            page.login()
+            new_objs = page.get_objects()
+        # TODO: obsługa błędów
         for i in range(len(objs)):
              if objs[i] != new_objs[i]:
                  page.notify(objs[i], new_objs[i])
