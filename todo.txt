@@ -7,6 +7,7 @@ serwer:
 - wysy³anie powiadomieñ
 
 wtyczka:
+- zapisywanie œcie¿ki z id elementu jeœli jakieœ jest
 - zabronione dodawanie pustych stron
 - dozwolone dodawanie tylko tych elementów, które bezpoœrednio zawieraj¹ tekst
 - wyœwietlanie powiadomieñ

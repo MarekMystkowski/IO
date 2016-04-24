@@ -47,7 +47,8 @@ class Change(models.Model):
     page = models.ForeignKey(Page)
     date = models.DateTimeField()
     displayed = models.BooleanField(default=False)
-    result = models.TextField()
+    old_value = models.TextField(default='', blank=True)
+    new_value = models.TextField(default='', blank=True)
 
     def __str__(self):
         return self.page.page_url + ': ' + self.result
