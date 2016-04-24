@@ -57,10 +57,6 @@ class Page:
                 e = e.getChildren()[0]
             prev_tag = e.tagName
             for index in obj_path:
-                if index == 4:
-                    print(e.innerHTML)
-                    print(len(e.getChildren()))
-                    print(index)
                 # pomijamy dodawany przez przeglądarki znacznik tbody
                 ignore = False
                 if prev_tag == 'table' and e.tagName != 'tbody' and e.tagName != 'thead':
@@ -73,8 +69,11 @@ class Page:
 
     # wysyła informację o zmianie na serwer
     def notify(self, old_value, new_value):
-        requests.post('http://127.0.0.1:8000/api/new_change/', {'device_id': device_id, 'old_value': old_value, 'new_value': new_value})
-
+        print("Zmiana na stronie " + self.url + ": " + old_value + " -> " + new_value)
+        r = requests.post('http://127.0.0.1:8000/api/new_change/', {'device_id': device_id, 'page_id': self.id, 'old_value': old_value, 'new_value': new_value})
+        if r.status_code != 200:
+            print("Error %d: " % r.status_code + r.text)
+            exit()
 
 
 def worker(page):
@@ -84,11 +83,11 @@ def worker(page):
     while working:
         time.sleep(page.interval)
         new_objs = page.get_objects()
-        # for i in range(len(objs)):
-        #     if objs[i] != new_objs[i]:
-        #         print('Zmiana na stronie "' + page.title + '": ' + objs[i] + ' -> ' + new_objs[i])
+        for i in range(len(objs)):
+             if objs[i] != new_objs[i]:
+                 page.notify(objs[i], new_objs[i])
         objs = new_objs
-        print(objs) # wyświetla aktualne wartości obiektów
+        #print(objs) # wyświetla aktualne wartości obiektów
 
 
 # id urządzenia
@@ -101,15 +100,20 @@ except FileNotFoundError:
         f.write(device_id)
     # to działa chyba tylko na Windowsie, ale webbrowser.open ma jakiś problem i otwiera stronę w IE zamiast w Chromie
     os.startfile('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
+    print("Connect this device to your account in the browser and run the program again.")
+    exit()
 
 
 # pobranie listy stron
 r = requests.post('http://127.0.0.1:8000/api/page_list/', {'device_id': device_id})
+if r.status_code != 200:
+    print("Error %d: " % r.status_code + r.text)
+    exit()
 pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
 
 
 # wątki do obserwowania stron
-for page in pages[2:]:
+for page in pages:
     page.thread = threading.Thread(target=worker, args=(page,))
     page.thread.start()
 
