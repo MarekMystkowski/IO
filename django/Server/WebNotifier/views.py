@@ -37,7 +37,7 @@ def edit_page(request):
             page = Page.objects.get(id=request.POST['page_id'])
             page.interval = request.POST['interval']
             page.active = False
-            if request.POST['active'] == 'True':
+            if request.POST.get('active', False):
                 page.active = True
             page.save()
         except KeyError:
