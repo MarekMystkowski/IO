@@ -9,7 +9,7 @@ def parse(html):
 
 
 class Page:
-    title = ''
+    id = 0
     url = ''
     paths = []
     interval = 60 # sekund
@@ -18,8 +18,9 @@ class Page:
     session = None
     thread = None
 
-    def __init__(self, url, paths, interval=None, login_url=None, login_data=None, login_submit=None):
+    def __init__(self, id, url, paths, interval=None, login_url=None, login_data=None, login_submit=None):
         self.session = requests.session()
+        self.id = id
         self.url = url
         self.paths = paths
         if interval is not None:
@@ -31,6 +32,7 @@ class Page:
         if login_submit is not None:
             self.login_submit = login_submit
 
+    # loguje się na stronę
     def login(self):
         if self.login_url:
             r = self.session.get(self.login_url)
@@ -41,16 +43,24 @@ class Page:
                     data[input.getAttribute('name')] = input.getAttribute('value')
             self.session.post(self.login_url, data)
 
+    # zwraca listę obserwowanych obiektów
     def get_objects(self):
         r = self.session.get(self.url)
         parser = parse(r.text)
-        self.title = parser.getElementsByTagName('title')[0].innerHTML
+        #self.title = parser.getElementsByTagName('title')[0].innerHTML
         doc = parser.getRoot()
         objs = []
         for obj_path in self.paths:
             e = doc
+            # pomijamy dodawany przez parser drugi znacznik html
+            if e.tagName == 'html' and e.getChildren()[0].tagName == 'html':
+                e = e.getChildren()[0]
             prev_tag = e.tagName
             for index in obj_path:
+                if index == 4:
+                    print(e.innerHTML)
+                    print(len(e.getChildren()))
+                    print(index)
                 # pomijamy dodawany przez przeglądarki znacznik tbody
                 ignore = False
                 if prev_tag == 'table' and e.tagName != 'tbody' and e.tagName != 'thead':
@@ -61,6 +71,11 @@ class Page:
             objs.append(e.innerHTML)
         return objs
 
+    # wysyła informację o zmianie na serwer
+    def notify(self, old_value, new_value):
+        requests.post('http://127.0.0.1:8000/api/new_change/', {'device_id': device_id, 'old_value': old_value, 'new_value': new_value})
+
+
 
 def worker(page):
     page.login() # TODO: obsługa wylogowania
@@ -69,9 +84,9 @@ def worker(page):
     while working:
         time.sleep(page.interval)
         new_objs = page.get_objects()
-        #for i in range(len(objs)):
-        #    if objs[i] != new_objs[i]:
-        #        print('Zmiana na stronie "' + page.title + '": ' + objs[i] + ' -> ' + new_objs[i])
+        # for i in range(len(objs)):
+        #     if objs[i] != new_objs[i]:
+        #         print('Zmiana na stronie "' + page.title + '": ' + objs[i] + ' -> ' + new_objs[i])
         objs = new_objs
         print(objs) # wyświetla aktualne wartości obiektów
 
@@ -90,11 +105,11 @@ except FileNotFoundError:
 
 # pobranie listy stron
 r = requests.post('http://127.0.0.1:8000/api/page_list/', {'device_id': device_id})
-pages = [Page(d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
+pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
 
 
 # wątki do obserwowania stron
-for page in pages:
+for page in pages[2:]:
     page.thread = threading.Thread(target=worker, args=(page,))
     page.thread.start()
 

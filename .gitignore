@@ -4,3 +4,4 @@
 *.pyc
 django/Server/db.sqlite3
 python/Observer/observer/device_id
+*.exe
