@@ -5,6 +5,7 @@
     <title>Logowanie</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}" />
 </head>
 <body>
     <div id="top">
@@ -18,8 +19,7 @@
         </div>
 
         {% if error %}
-            <div id="messages">
-                <h2>Błąd:</h2>
+            <div id="error">
                 <div>{{ error }}</div>
             </div>
         {% endif %}
@@ -58,7 +58,7 @@
                         <div id="td"><input id="id_password" name="password" type="password" ></div>
                     </div>
                     <input type="hidden" name ="next" value="{{ next }}"/>
-                    <input type="submit" name="submit_register" value="Register" />
+                    <input type="submit" name="submit_register" value="Rejestruj" />
                 </form>
             </div>
         </div>

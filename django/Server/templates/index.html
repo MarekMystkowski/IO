@@ -38,7 +38,7 @@
                             <form id="tr" action="" method="post">
                                 <div id="td">{{ change.page }}</div>
                                 <div id="td">{{ change.date }}</div>
-                                <div id="td">{{ change.result }}</div>
+                                <div id="td">{{ change.old_value }} -> {{ change.new_value }}</div>
                                 <input type="hidden" name="change_id" value="{{ change.id }}">
                                 <div id="td"><input type="submit" onclick="window.open('{{ change.page }}')"
                                                     name="submit_vis_change" class="button_save" value=" "></div>
@@ -70,7 +70,7 @@
                             <div id="tr">
                                 <div id="td">{{ change.page }}</div>
                                 <div id="td">{{ change.date.date }}<br>{{ change.date.time }}</div>
-                                <div id="td">{{ change.result }}</div>
+                                <div id="td">{{ change.old_value }} -> {{ change.new_value }}</div>
                             </div>
                         {% endfor %}
                     </div>
