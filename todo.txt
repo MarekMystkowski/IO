@@ -18,8 +18,9 @@ odœwie¿aczka:
 - aktualizacja listy stron co okreœlony czas
 - obs³uga b³êdów (np. ca³kowita zmiana struktury strony, b³êdne dane logowania itp.) i wysy³anie informacji o b³êdach na serwer
 
-strona:
-- wyœwietlanie b³êdów po zmianie struktury strony
+strona www:
+- wyœwietlanie informacji o b³êdach na obserwowanych stronach
+- bug przy dodawaniu urz¹dzenia: gdy jesteœmy na stronie edit_device i siê w tym czasie wylogujemy, to po naciœniêciu Dodaj przenosi nas poprawnie na stronê logowania, ale potem po zalogowaniu siê wywala
 
 Android:
 - wyœwietlanie powiadomieñ
