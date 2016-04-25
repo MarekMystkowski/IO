@@ -1,0 +1,14 @@
+/* Dostosowanie tabel (adres do lewej, dane liczbowe w input od prawej)*/
+div#old_change > div#table >div#tr > div#td:nth-child(1) {
+    text-align: left;
+}
+div#old_change > div#table >div#tr:nth-child(1) > div#td {
+    text-align: center;
+}
+div#pages > div#table >form#tr > div#td:nth-child(1) {
+    text-align: left;
+}
+div#pages > div#table >form#tr > div#td:nth-child(2) >input {
+    text-align: right;
+    width: 60px;
+}

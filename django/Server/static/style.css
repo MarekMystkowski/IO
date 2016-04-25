@@ -1,0 +1,92 @@
+div#logo {
+    text-align: center;
+}
+
+div#logout {
+    text-align: right;
+    padding: 1% 2% 0;
+}
+
+div#title {
+    text-align: center;
+    padding:0 0 3% 0;
+}
+
+div#title>h1 {
+    color: #314060;
+    font-family: Comic Sans MS;
+    font-weight: 900;
+}
+
+div#content {
+    width: 94%;
+    margin: 0 3% 0 3%;
+    text-align: center;
+}
+
+div#tables {
+    display: inline-table;
+}
+div#tables >div {
+    padding:0 0 3% 0;
+}
+
+div#tables >div >h2 {
+    text-align: center;
+    color: #69291a;
+    font-weight: 700;
+}
+
+
+/* Ukłąd standardowej tabeli*/
+div#tr {
+    display: table-row;
+    width: 80%;
+}
+form#tr {
+    display: table-row;
+    width: 80%;
+}
+
+div#td {
+    padding: 1% 5px 0;
+    display: table-cell;
+    text-align: center;
+    height: 100%;
+    vertical-align: middle;
+    border:1px solid #eeeee6;
+}
+
+div#table > div:nth-child(1) {
+    background-color:  #eeeee6;
+    font-weight:bold;
+}
+
+/* Przyciski */
+.button_up {
+    background: url(/static/button_up.png) no-repeat ;
+    border: none;
+    width: 24px;
+    height: 24px;
+}
+
+.button_down {
+    background: url(/static/button_down.png) no-repeat ;
+    border: none;
+    width: 24px;
+    height: 24px;
+}
+
+.button_delete {
+    background: url(/static/button_delete.png) no-repeat ;
+    border: none;
+    width: 24px;
+    height: 24px;
+}
+
+.button_save {
+    background: url(/static/button_save.png) no-repeat ;
+    border: none;
+    width: 24px;
+    height: 24px;
+}

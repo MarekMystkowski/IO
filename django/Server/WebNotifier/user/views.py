@@ -36,6 +36,7 @@ def index(request):
                 user.set_password(user.password)
                 user.save()
                 UserProfile(user=user, account_type='5', date_of_registration=timezone.now()).save()
+                login(request, authenticate(username=request.POST['username'], password=request.POST['password']))
                 return HttpResponseRedirect(next_page)
 
             else:

@@ -37,7 +37,7 @@ def edit_page(request):
             page = Page.objects.get(id=request.POST['page_id'])
             page.interval = request.POST['interval']
             page.active = False
-            if request.POST['active'] == 'True':
+            if request.POST.get('active', False):
                 page.active = True
             page.save()
         except KeyError:
@@ -98,23 +98,21 @@ def index(request):
                     change.displayed = True
                     change.save()
 
-    not_shown_change = []
-    shown_change = []
+    new_changes = []
+    old_changes = []
     for page in pages:
-        not_shown_change.extend(Change.objects.all().filter(page=page, displayed=False))
-        shown_change.extend(Change.objects.all().filter(page=page, displayed=True).order_by('-date')[:max_quantity])
-        not_shown_change.sort(key=lambda x: x.date, reverse=True)
-        shown_change = sorted(shown_change, key=lambda x: x.date)[::-1][:max_quantity]
+        new_changes.extend(Change.objects.all().filter(page=page, displayed=False))
+        old_changes.extend(Change.objects.all().filter(page=page, displayed=True).order_by('-date')[:max_quantity])
+        new_changes.sort(key=lambda x: x.date, reverse=True)
+        old_changes = sorted(old_changes, key=lambda x: x.date)[::-1][:max_quantity]
 
     return render(request, 'index.html', {
         'pages' : pages,
         'is_pages' : len(pages) != 0,
         'devices_and_iter' : map(lambda x,i :(x,i+1), devices, range(len(devices))),
         'len_devices' : len(devices),
-        'not_shown_change' : not_shown_change,
-        'is_not_shown_change' : len(not_shown_change) != 0,
-        'shown_change' : shown_change,
-        'is_shown_change' : len(shown_change) != 0
+        'new_changes' : new_changes,
+        'old_changes' : old_changes,
     })
 
 
