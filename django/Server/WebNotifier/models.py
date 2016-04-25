@@ -51,4 +51,4 @@ class Change(models.Model):
     new_value = models.TextField(default='', blank=True)
 
     def __str__(self):
-        return self.page.page_url + ': ' + self.result
+        return self.page.page_url + ': ' + self.old_value + ' -> ' + self.new_value

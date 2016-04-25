@@ -5,41 +5,40 @@
     <title>Dodawanie strony</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
-     <link rel="stylesheet" type="text/css" href="{% static 'edit_page.css' %}" />
 </head>
 <body>
-    <div id="top">
-        <div id="logo">
+    <section id="top">
+        <div class="logo">
             <img src="{% static "WebNotifier.png" %}">
         </div>
-    </div>
-    <div id="content">
-        <div id="title">
-            <h1>Dodawanie nowej strony</h1>
-        </div>
+    </section>
 
-        <div id="tables">
-            <div id="edit_page">
-                <h2>Ustaw parametry dla nowej strony</h2>
-                <form id="table" method="post">
-                    <div id="tr">
-                        <div id="td">Strona: </div>
-                        <div id="td">{{ page_url }}</div>
-                    </div>
-                    <div id="tr">
-                        <div id="td">Częstotliwość: </div>
-                        <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund</div>
-                    </div>
-                    <div id="tr">
-                        <div id="td">Obserwuj: </div>
-                        <div id="td"><input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}></div>
-                    </div>
+    <section id="content">
 
-                    <input type="hidden" name="page_id" value="{{ page_id }}">
-                    <input type="submit" name="submit" value="Zapisz zmiany" />
-                </form>
-            </div>
-        </div>
-    </div>
+        <article>
+            <h2>Ustaw parametry dla nowej strony:</h2>
+            <form class="table" method="post">
+                <div class="tr">
+                    <div class="td right noborder">Strona: </div>
+                    <div class="td left noborder"><a href="{{ page_url }}">{{ page_url }}</a></div>
+                </div>
+                <div class="tr">
+                    <div class="td right noborder">Częstotliwość: </div>
+                    <div class="td left noborder"><input type="number" name="interval" min="1" max="10000" value="{{ interval }}"> sekund</div>
+                </div>
+                <div class="tr">
+                    <div class="td right noborder">Obserwuj: </div>
+                    <div class="td left noborder"><input type="checkbox" name="active" value="True" {% if active %} checked {% endif %}></div>
+                </div>
+                <div class="tr">
+                    <div class="td noborder"></div>
+                    <div class="td left noborder">
+                        <input type="hidden" name="page_id" value="{{ page_id }}">
+                        <input type="submit" name="submit" value="Zapisz zmiany" />
+                    </div>
+                </div>
+            </form>
+        </article>
+    </section>
 </body>
 </html>

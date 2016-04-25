@@ -8,31 +8,28 @@
 </head>
 <body>
     <div id="top">
-        <div id="logo">
+        <div class="logo">
             <img src="{% static "WebNotifier.png" %}">
         </div>
     </div>
-    <div id="content">
-        <div id="title">
-            <h1>Dodawanie nowego urządzenia</h1>
-        </div>
-        <div id="tables">
-            <div id="edit_device">
-                <h2>Ustaw nazwę dla nowego urządzenia.</h2>
-                <form id="table" method="post">
-                    <div id="tr">
-                        <div id="td">Nazwa: </div>
-                        <div id="td"><input type="text" name="name" maxlength="50" value="{{ device_name }}"></div>
+
+    <section id="content">
+        <article>
+            <h2>Dodaj nowe urządzenie:</h2>
+            <form class="table" method="post">
+                <div class="tr">
+                    <div class="td right noborder">Nazwa: </div>
+                    <div class="td left noborder"><input type="text" name="name" maxlength="50" value="{{ device_name }}"></div>
+                </div>
+                <div class="tr">
+                    <div class="td noborder"></div>
+                    <div class="td left noborder">
+                        <input type="hidden" name="device_id" value="{{ device_id }}">
+                        <input type="submit" name="submit" value="Dodaj" />
                     </div>
-                    <div id="tr">
-                        <div id="td">Prorytet: </div>
-                        <div id="td">Można go ustawić na głównej stronie.</div>
-                    </div>
-                    <input type="hidden" name="device_id" value="{{ device_id }}">
-                    <input type="submit" name="submit" value="Dodaj" />
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
+            </form>
+        </article>
+    </section>
 </body>
 </html>

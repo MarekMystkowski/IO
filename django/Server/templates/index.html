@@ -5,138 +5,136 @@
     <title>Web Notifier</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}" />
 </head>
 <body>
-    <div id="top">
-        <div id="logout">
+    <section id="top">
+        <div class="logout">
             <a href="logout"><img src="{% static "wyloguj.png" %}" alt="wyloguj"></a>
         </div>
-        <div id="logo">
+        <div class="logo">
             <img src="{% static "WebNotifier.png" %}">
         </div>
-    </div>
-    <div id="content">
-        <div id="title">
-            <h1>Zarządzaj swoimi <br> stronami do obserwowania</h1>
-        </div>
-
-        <div id="tables">
-            <div id="new_changes">
-                {% if new_changes %}
-                    <h2>Jeszcze niz zobaczone zmiany</h2>
-
-                    <div id="table">
-                        <div id="tr">
-                            <div id="td">adres strony</div>
-                            <div id="td">data zmiany</div>
-                            <div id="td">rezultat</div>
-                            <div id="td">Zobacz /<br>potwierdź</div>
-                        </div>
-
-                        {% for change in new_changes %}
-                            <form id="tr" action="" method="post">
-                                <div id="td">{{ change.page }}</div>
-                                <div id="td">{{ change.date }}</div>
-                                <div id="td">{{ change.old_value }} -> {{ change.new_value }}</div>
-                                <input type="hidden" name="change_id" value="{{ change.id }}">
-                                <div id="td"><input type="submit" onclick="window.open('{{ change.page }}')"
-                                                    name="submit_vis_change" class="button_save" value=" "></div>
-                            </form>
-                        {% endfor %}
+    </section>
+    <section id="content">
+        <article>
+            {% if new_changes %}
+                <h2>Nowe zmiany:</h2>
+                <div class="table">
+                    <div class="tr">
+                        <div class="th">adres strony</div>
+                        <div class="th">data zmiany</div>
+                        <div class="th">rezultat</div>
+                        <div class="th">potwierdź</div>
                     </div>
-                    <div id="vis_all_change">
-                        <form action="" method="post">
-                            <input type="submit" name="submit_vis_all_change" value="Potwierdź wszystkie">
+
+                    {% for change in new_changes %}
+                        <form class="tr" action="" method="post">
+                            <div class="td left"><a href="{{ change.page.page_url }}">{{ change.page }}</a></div>
+                            <div class="td left">{{ change.date.date }}, {{ change.date.time }}</div>
+                            <div class="td left">{{ change.old_value }} → {{ change.new_value }}</div>
+                            <input type="hidden" name="change_id" value="{{ change.id }}">
+                            <div class="td"><input type="submit" name="submit_vis_change" class="button_save" value=" "></div>
                         </form>
-                    </div>
-                {% else %}
-                    <h2>Wszystkie zmiany już zobaczyłeś.</h2>
-                {% endif %}
-            </div>
+                    {% endfor %}
 
-            <div id="old_change">
-                {% if old_changes %}
-                    <h2>Zmiany już wyświetlone.</h2>
-
-                    <div id="table">
-                        <div id="tr">
-                            <div id="td">adres strony</div>
-                            <div id="td">data zmiany</div>
-                            <div id="td">rezultat</div>
+                    <div class="tr">
+                        <div class="td noborder"></div>
+                        <div class="td noborder"></div>
+                        <div class="td noborder"></div>
+                        <div class="td">
+                            <form action="" method="post">
+                                <input type="submit" name="submit_vis_all_change" class="button_save" title="Potwierdź wszystkie" value=" ">
+                            </form>
                         </div>
+                    </div>
+                </div>
+            {% else %}
+                <h2>Brak nowych zmian.</h2>
+            {% endif %}
+        </article>
 
-                        {% for change in old_changes %}
-                            <div id="tr">
-                                <div id="td">{{ change.page }}</div>
-                                <div id="td">{{ change.date.date }}<br>{{ change.date.time }}</div>
-                                <div id="td">{{ change.old_value }} -> {{ change.new_value }}</div>
+        <article>
+            {% if old_changes %}
+                <h2>Historia zmian:</h2>
+                <div class="table">
+                    <div class="tr">
+                        <div class="th">adres strony</div>
+                        <div class="th">data zmiany</div>
+                        <div class="th">rezultat</div>
+                    </div>
+
+                    {% for change in old_changes %}
+                        <div class="tr">
+                            <div class="td left"><a href="{{ change.page.page_url }}">{{ change.page }}</a></div>
+                            <div class="td left">{{ change.date.date }}, {{ change.date.time }}</div>
+                            <div class="td left">{{ change.old_value }} → {{ change.new_value }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </article>
+
+        <article>
+            {% if pages %}
+                <h2>Twoje zarejestrowane strony:</h2>
+                <div class="table">
+                    <div class="tr">
+                        <div class="th">adres strony</div>
+                        <div class="th">częstotliwość [s]</div>
+                        <div class="th small">obserwuj</div>
+                        <div class="th small">akcje</div>
+                    </div>
+                    {% for page in pages %}
+                        <form class="tr" action="" method="post">
+                            <div class="td left"><a href="{{ page.page_url }}">{{ page.page_url }}</a></div>
+                            <div class="td"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"></div>
+                            <div class="td small"><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></div>
+                            <input type="hidden" name="page_id" value="{{ page.id }}">
+                            <div class="td small">
+                                <input type="submit" name="submit_sav_page" class="button_save" title="Zatwierdź zmiany" value=" ">
+                                <input type="submit" name="submit_del_page" class="button_delete" title="Usuń stronę" value=" ">
                             </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+                        </form>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h2>Nie masz aktualnie żadnych zarejestrowanych stron.</h2>
+            {% endif %}
+        </article>
 
-            <div id="pages">
-                {% if is_pages %}
-                    <h2>Twoje zarejestrowane strony</h2>
-                    <div id="table">
-                        <div id="tr">
-                            <div id="td">adres strony</div>
-                            <div id="td">częstotliwość</div>
-                            <div id="td">obserwuj</div>
-                            <div id="td">akcje</div>
-                        </div>
-                        {% for page in pages %}
-                            <form id="tr" action="" method="post">
-                                <div id="td">{{ page.page_url }}</div>
-                                <div id="td"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}">sekund </div>
-                                <div id="td"><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></div>
-                                <input type="hidden" name="page_id" value="{{ page.id }}">
-                                <div id="td">
-                                    <input type="submit" name="submit_sav_page" class="button_save" value=" ">
-                                    <input type="submit" name="submit_del_page" class="button_delete" value=" ">
+        <article>
+            {% if devices %}
+                <h2>Twoje urządzenia:</h2>
+                <div class="table">
+                    <div class="tr">
+                        <div class="th small">priorytet</div>
+                        <div class="th">nazwa</div>
+                        {% if len_devices > 1 %}<div class="th" colspan="">przesuń</div>{% endif %}
+                        <div class="th" colspan="">usuń</div>
+                    </div>
+                    {% for device in devices %}
+                        <form class="tr" action="" method="post">
+                            <div class="td right">{{ forloop.counter }}.</div>
+                            <div class="td left">{{ device.name }}</div>
+                            <input type="hidden" name="device_id" value="{{ device.id }}">
+                            {% if len_devices > 1 %}
+                                <div class="td small">
+                                    {% if not forloop.first %}
+                                        <input type="submit" class="button_up" name="submit_up_device" title="Przesuń w górę" value=" " /><br>
+                                    {% endif %}
+                                    {% if not forloop.last %}
+                                        <input type="submit" class="button_down" name="submit_down_device" title="Przesuń w dół" value=" " />
+                                    {% endif %}
                                 </div>
-                            </form>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <h2>Nie masz aktualnie żadnych zarejestrowanych stron.</h2>
-                {% endif %}
-            </div>
-
-            <div id="devices">
-                {% if len_devices != 0 %}
-                    <h2>Twoje urządzenia</h2>
-                    <div id="table">
-                        <div id="tr">
-                            <div id="td">nazwa</div>
-                            {% if len_devices > 1 %} <div id="td"></div> {% endif %}
-                            <div id="td"></div>
-                        </div>
-                        {% for device, iter in devices_and_iter %}
-                            <form id="tr" action="" method="post">
-                                <div id="td">{{ device.name }}</div>
-                                <input type="hidden" name="device_id" value="{{ device.id }}">
-                                {% if len_devices > 1 %}
-                                    <div id="td">
-                                        {% if iter != 1 %}
-                                            <input type="submit" class="button_up" name="submit_up_device" value=" " /><br>
-                                        {% endif %}
-                                        {% if iter != len_devices %}
-                                            <input type="submit" class="button_down" name="submit_down_device" value=" " />
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                                <div id="td"><input type="submit" class="button_delete" name="submit_del_device" value=" "></div>
-                            </form>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <h2>Nie masz aktualnie żadnych dodanych urządzeń.</h2>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+                            {% endif %}
+                            <div class="td small"><input type="submit" class="button_delete" name="submit_del_device" title="Usuń urządzenie" value=" "></div>
+                        </form>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h2>Nie masz aktualnie żadnych dodanych urządzeń.</h2>
+            {% endif %}
+        </article>
+    </section>
 </body>
 </html>

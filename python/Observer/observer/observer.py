@@ -108,7 +108,7 @@ except FileNotFoundError:
         f.write(device_id)
     # to działa chyba tylko na Windowsie, ale webbrowser.open ma jakiś problem i otwiera stronę w IE zamiast w Chromie
     os.startfile('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
-    print("Connect this device to your account in the browser and run the program again.")
+    print("Connect this device to your account in your browser and run the program again.")
     exit()
 
 

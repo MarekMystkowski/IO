@@ -108,9 +108,8 @@ def index(request):
 
     return render(request, 'index.html', {
         'pages' : pages,
-        'is_pages' : len(pages) != 0,
-        'devices_and_iter' : map(lambda x,i :(x,i+1), devices, range(len(devices))),
-        'len_devices' : len(devices),
+        'devices': devices,
+        'len_devices': len(devices),
         'new_changes' : new_changes,
         'old_changes' : old_changes,
     })
