@@ -53,9 +53,11 @@ def what(request):
     that = 'nothing'
 
     if msg == 'hi':
-        that = 'hello'
+        device.active = True
+        device.save()
     elif msg == 'bye':
-        that = 'see you soon!'
+        device.active = False
+        device.save()
     elif msg == 'what':
         that = 'that'
 
