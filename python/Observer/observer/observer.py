@@ -153,8 +153,8 @@ try:
         if r.status_code != 200:
             print("Error %d: " % r.status_code + r.text)
             exit()
-        print(r.json()['that'])
-        time.sleep(5)
+        print('that: ' + r.json()['that'])
+        time.sleep(4)
 
 except KeyboardInterrupt:
     r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'bye'})
