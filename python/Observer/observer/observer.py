@@ -3,6 +3,7 @@ import socket, os, time, threading
 import requests, AdvancedHTMLParser
 import sys
 import subprocess
+import time
 
 
 def open_file(filename):
@@ -138,3 +139,14 @@ for page in pages:
     page.thread = threading.Thread(target=worker, args=(page,))
     page.thread.start()
 
+# atrapa
+while True:
+    r = requests.post(server_address + '/api/what/', {'device_id': device_id})
+    if r.status_code != 200:
+        print("Error %d: " % r.status_code + r.text)
+        exit()
+    print(r.json()['that'])
+    try:
+        time.sleep(5)
+    except KeyboardInterrupt:
+        exit()
