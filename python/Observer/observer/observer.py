@@ -19,6 +19,9 @@ def parse(html):
     return parser
 
 
+server_address = 'http://127.0.0.1:8000'
+
+
 class Page:
     id = 0
     url = ''
@@ -84,7 +87,7 @@ class Page:
     # wysyła informację o zmianie na serwer
     def notify(self, old_value, new_value):
         print("Zmiana na stronie " + self.url + ": " + old_value + " -> " + new_value)
-        r = requests.post('http://127.0.0.1:8000/api/new_change/', {'device_id': device_id, 'page_id': self.id, 'old_value': old_value, 'new_value': new_value})
+        r = requests.post(server_address + '/api/new_change/', {'device_id': device_id, 'page_id': self.id, 'old_value': old_value, 'new_value': new_value})
         if r.status_code != 200:
             print("Error %d: " % r.status_code + r.text)
             exit()
@@ -117,13 +120,13 @@ except FileNotFoundError:
     device_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(32))
     with open('device_id', 'w') as f:
         f.write(device_id)
-    open_file('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
+    open_file(server_address + '/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
     print("Connect this device to your account in your browser and run the program again.")
     exit()
 
 
 # pobranie listy stron
-r = requests.post('http://127.0.0.1:8000/api/page_list/', {'device_id': device_id})
+r = requests.post(server_address + '/api/page_list/', {'device_id': device_id})
 if r.status_code != 200:
     print("Error %d: " % r.status_code + r.text)
     exit()
