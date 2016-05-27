@@ -26,6 +26,7 @@ class Device(models.Model):
     user = models.ForeignKey(UserProfile)
     priority = models.IntegerField()
     active = models.BooleanField(default=False)
+    buffer = models.TextField(default='')
 
     def __str__(self):
         return self.name
