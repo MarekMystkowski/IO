@@ -59,7 +59,10 @@ def what(request):
         device.active = False
         device.save()
     elif msg == 'what':
-        that = 'that'
+        if not device.active:
+            that = 'nope'
+        else:
+            that = 'that'
 
     ret = {'that': that}
     return HttpResponse(json.dumps(ret))
