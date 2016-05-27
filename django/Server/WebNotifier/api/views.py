@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, Http404
 from WebNotifier.models import *
+import json
 
 
 def page_list(request):
@@ -38,3 +39,15 @@ def new_change(request):
         return HttpResponse('Invalid device or page id.', status=401)
 
     return HttpResponse('')
+
+
+def what(request):
+    try:
+        device = Device.objects.get(id=request.POST['device_id'])
+    except KeyError:
+        return HttpResponse('Missing POST data.', status=400)
+    except ObjectDoesNotExist:
+        return HttpResponse('Invalid device.', status=401)
+    
+    ret = {'that': 'hello'}
+    return HttpResponse(json.dumps(ret))
