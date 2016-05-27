@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from Tools.scripts.objgraph import def2file
 from django.db import models
 from django.contrib.auth.models import User
 
