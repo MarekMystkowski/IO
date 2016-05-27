@@ -149,7 +149,7 @@ if r.status_code != 200:
 
 try:
     while True:
-        r = requests.post(server_address + '/api/what/', {'device_id': device_id})
+        r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'what'})
         if r.status_code != 200:
             print("Error %d: " % r.status_code + r.text)
             exit()
