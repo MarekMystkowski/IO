@@ -23,6 +23,7 @@ class Device(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(UserProfile)
     priority = models.IntegerField()
+    active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
