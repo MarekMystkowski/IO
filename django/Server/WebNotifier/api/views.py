@@ -44,10 +44,20 @@ def new_change(request):
 def what(request):
     try:
         device = Device.objects.get(id=request.POST['device_id'])
+        msg = request.POST['msg']
     except KeyError:
         return HttpResponse('Missing POST data.', status=400)
     except ObjectDoesNotExist:
         return HttpResponse('Invalid device.', status=401)
-    
-    ret = {'that': 'hello'}
+
+    that = 'nothing'
+
+    if msg == 'hi':
+        that = 'hello'
+    elif msg == 'bye':
+        that = 'see you soon!'
+    elif msg == 'what':
+        that = 'that'
+
+    ret = {'that': that}
     return HttpResponse(json.dumps(ret))
