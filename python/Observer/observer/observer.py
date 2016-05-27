@@ -126,27 +126,38 @@ except FileNotFoundError:
     exit()
 
 
-# pobranie listy stron
-r = requests.post(server_address + '/api/page_list/', {'device_id': device_id})
+# # pobranie listy stron
+# r = requests.post(server_address + '/api/page_list/', {'device_id': device_id})
+# if r.status_code != 200:
+#     print("Error %d: " % r.status_code + r.text)
+#     exit()
+# pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
+#
+#
+# # wątki do obserwowania stron
+# for page in pages:
+#     page.thread = threading.Thread(target=worker, args=(page,))
+#     page.thread.start()
+
+
+# atrapa
+
+r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'hi'})
 if r.status_code != 200:
     print("Error %d: " % r.status_code + r.text)
     exit()
-pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
 
+try:
+    while True:
+        r = requests.post(server_address + '/api/what/', {'device_id': device_id})
+        if r.status_code != 200:
+            print("Error %d: " % r.status_code + r.text)
+            exit()
+        print(r.json()['that'])
+        time.sleep(5)
 
-# wątki do obserwowania stron
-for page in pages:
-    page.thread = threading.Thread(target=worker, args=(page,))
-    page.thread.start()
-
-# atrapa
-while True:
-    r = requests.post(server_address + '/api/what/', {'device_id': device_id})
+except KeyboardInterrupt:
+    r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'bye'})
     if r.status_code != 200:
         print("Error %d: " % r.status_code + r.text)
-        exit()
-    print(r.json()['that'])
-    try:
-        time.sleep(5)
-    except KeyboardInterrupt:
-        exit()
+    exit()
