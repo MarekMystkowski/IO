@@ -1,6 +1,17 @@
 import random, string, json
 import socket, os, time, threading
 import requests, AdvancedHTMLParser
+import sys
+import subprocess
+
+
+def open_file(filename):
+    if sys.platform == "win32":
+        os.startfile(filename)
+    else:
+        opener ="open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, filename])
+
 
 def parse(html):
     parser = AdvancedHTMLParser.IndexedAdvancedHTMLParser()
@@ -106,8 +117,7 @@ except FileNotFoundError:
     device_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(32))
     with open('device_id', 'w') as f:
         f.write(device_id)
-    # to działa chyba tylko na Windowsie, ale webbrowser.open ma jakiś problem i otwiera stronę w IE zamiast w Chromie
-    os.startfile('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
+    open_file('http://127.0.0.1:8000/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
     print("Connect this device to your account in your browser and run the program again.")
     exit()
 
