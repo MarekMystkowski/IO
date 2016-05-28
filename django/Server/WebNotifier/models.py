@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from Tools.scripts.objgraph import def2file
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -10,10 +9,12 @@ AccountTypes = (
     ('5', 'Premium'),
 )
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     date_of_registration = models.DateTimeField()
     account_type = models.CharField(max_length=20, choices=AccountTypes)
+    active_device = models.CharField(max_length=32, default='')
 
     def __str__(self):
         return self.user.username
@@ -24,6 +25,8 @@ class Device(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(UserProfile)
     priority = models.IntegerField()
+    active = models.BooleanField(default=False)
+    buffer = models.TextField(default='')
 
     def __str__(self):
         return self.name
