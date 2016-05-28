@@ -94,12 +94,15 @@ class Page:
             exit()
 
 
+kill_em_all = False
+event = threading.Event()
+
+
 def worker(page):
     page.login()
     objs = page.get_objects()
     working = True
-    while working:
-        time.sleep(page.interval)
+    while working and not kill_em_all:
         new_objs = page.get_objects()
         # w przypadku wykrycia zmiany (albo błędu) logujemy się ponownie
         if objs != new_objs:
@@ -111,7 +114,43 @@ def worker(page):
                  page.notify(objs[i], new_objs[i])
         objs = new_objs
         #print(objs) # wyświetla aktualne wartości obiektów
+        # time.sleep(page.interval)
+        event.wait(page.interval)
 
+
+pages = []
+
+
+def start_threads():
+    # pobranie listy stron
+    r = requests.post(server_address + '/api/page_list/', {'device_id': device_id})
+    if r.status_code != 200:
+        print("Error %d: " % r.status_code + r.text)
+        exit()
+    global pages
+    pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in
+             json.loads(r.text)]
+
+    # wątki do obserwowania stron
+    for page in pages:
+        page.thread = threading.Thread(target=worker, args=(page,))
+        page.thread.start()
+
+
+def stop_threads():
+    global kill_em_all
+    kill_em_all = True
+    global event
+    event.set()
+    for page in pages:
+        page.thread.join()
+    kill_em_all = False
+    event.clear()
+
+
+def restart_threads():
+    stop_threads()
+    start_threads()
 
 # id urządzenia
 try:
@@ -124,21 +163,6 @@ except FileNotFoundError:
     open_file(server_address + '/add_device?device_id=' + device_id + '&device_name=' + socket.gethostname())
     print("Connect this device to your account in your browser and run the program again.")
     exit()
-
-
-# # pobranie listy stron
-# r = requests.post(server_address + '/api/page_list/', {'device_id': device_id})
-# if r.status_code != 200:
-#     print("Error %d: " % r.status_code + r.text)
-#     exit()
-# pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
-#
-#
-# # wątki do obserwowania stron
-# for page in pages:
-#     page.thread = threading.Thread(target=worker, args=(page,))
-#     page.thread.start()
-
 
 # atrapa
 
@@ -162,19 +186,23 @@ try:
             action = 'wait'
         elif msg == 'start':
             action = 'start'
+            start_threads()
         elif msg == 'stop':
             action = 'stop'
+            stop_threads()
             r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'stopped'})
             if r.status_code != 200:
                 print("Error %d: " % r.status_code + r.text)
                 exit()
         elif msg == 'update':
             action = 'update'
+            restart_threads()
 
         print('action: ' + action)
         time.sleep(4)
 
 except KeyboardInterrupt:
+    stop_threads()
     r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'bye'})
     if r.status_code != 200:
         print("Error %d: " % r.status_code + r.text)
