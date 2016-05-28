@@ -55,14 +55,50 @@ def what(request):
     if msg == 'hi':
         device.active = True
         device.save()
+        if Device.objects.filter(user=device.user, active=True).count() == 1:
+            device.user.active_device = device.id
+            device.buffer = 'start'
+            device.user.save()
+            device.save()
+        else:
+            if device.priority > Device.objects.get(id=device.user.active_device):
+                ad = Device.objects.get(id=device.user.active_device)
+                ad.buffer = 'stop'
+                ad.save()
+                device.user.active_device = device.id
+                device.user.save()
+
     elif msg == 'bye':
         device.active = False
         device.save()
+        if Device.objects.filter(user=device.user, active=True).count() == 0:
+            device.user.active_device = ''
+            device.user.save()
+        else:
+            best = Device.objects.filter(user=device.user, active=True).order_by('-priority')[0]
+            device.user.active_device = best.id
+            device.user.save()
+            best.buffer = 'start'
+            best.save()
+
     elif msg == 'what':
         if not device.active:
             that = 'nope'
-        else:
-            that = 'that'
+        elif device.buffer == '':
+            that = 'wait'
+        elif device.buffer == 'start':
+            that = 'start'
+        elif device.buffer == 'stop':
+            that = 'stop'
+        elif device.buffer == 'update':
+            that = 'update'
+        device.buffer = ''
+        device.save()
+    elif msg == 'stopped':
+        ad = Device.objects.get(id=device.user.active_device)
+        ad.buffer = 'start'
+        ad.save()
+        that = 'ok'
 
     ret = {'that': that}
     return HttpResponse(json.dumps(ret))
