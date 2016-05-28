@@ -61,7 +61,7 @@ def what(request):
             device.user.save()
             device.save()
         else:
-            if device.priority > Device.objects.get(id=device.user.active_device):
+            if device.priority < Device.objects.get(id=device.user.active_device):
                 ad = Device.objects.get(id=device.user.active_device)
                 ad.buffer = 'stop'
                 ad.save()
@@ -75,7 +75,7 @@ def what(request):
             device.user.active_device = ''
             device.user.save()
         else:
-            best = Device.objects.filter(user=device.user, active=True).order_by('-priority')[0]
+            best = Device.objects.filter(user=device.user, active=True).order_by('priority')[0]
             device.user.active_device = best.id
             device.user.save()
             best.buffer = 'start'
