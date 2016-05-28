@@ -14,7 +14,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     date_of_registration = models.DateTimeField()
     account_type = models.CharField(max_length=20, choices=AccountTypes)
-    update = models.BooleanField(default=False)
     active_device = models.CharField(max_length=32, default='')
 
     def __str__(self):
