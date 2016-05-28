@@ -153,7 +153,25 @@ try:
         if r.status_code != 200:
             print("Error %d: " % r.status_code + r.text)
             exit()
-        print('that: ' + r.json()['that'])
+        msg = r.json()['that']
+
+        action = ''
+        if msg == 'nope':
+            action = 'bad boy'
+        elif msg == 'wait':
+            action = 'wait'
+        elif msg == 'start':
+            action = 'start'
+        elif msg == 'stop':
+            action = 'stop'
+            r = requests.post(server_address + '/api/what/', {'device_id': device_id, 'msg': 'stopped'})
+            if r.status_code != 200:
+                print("Error %d: " % r.status_code + r.text)
+                exit()
+        elif msg == 'update':
+            action = 'update'
+
+        print('action: ' + action)
         time.sleep(4)
 
 except KeyboardInterrupt:
