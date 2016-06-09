@@ -1,7 +1,8 @@
 .idea/
 *.iml
 *.pyc
-*.pyc
 django/Server/db.sqlite3
+django/Server/WebNotifier/migrations
 python/Observer/observer/device_id
+python/Observer/observer/dist
 *.exe
