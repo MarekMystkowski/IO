@@ -1,7 +1,7 @@
 
 var state = "login_ask"; // login_ask, login_wait, objects
 var page_data = {};
-var login_url = "";
+var login_url = {};
 var login_data = {};
 
 
@@ -43,11 +43,19 @@ function action_stop() {
     });
     state = "login_ask";
     page_data = {};
-    login_url = "";
+    login_url = {};
     login_data = {};
 }
 
 function action_save() {
+    // czy zostały wybrane jakiekolwiek elementy?
+    var page_url = "";
+    for (var key in page_data)
+        if (page_data.hasOwnProperty(key))
+            page_url = key;
+    if (page_url.length == 0)
+        return;
+
     // prześlij dane na serwer
     var url = "data:text/html;charset=utf8,";
     function append(key, value) {
@@ -62,7 +70,7 @@ function action_save() {
     var page_url = Object.keys(page_data)[0];
     append('page_url', page_url);
     append('page_data', JSON.stringify(page_data[page_url]));
-    append('login_url', login_url);
+    append('login_url', JSON.stringify(login_url));
     append('login_data', JSON.stringify(login_data));
     url += encodeURIComponent(form.outerHTML);
     url += encodeURIComponent('<script>document.forms[0].submit();</script>');

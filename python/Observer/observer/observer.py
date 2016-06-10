@@ -50,13 +50,13 @@ class Page:
     # loguje się na stronę
     def login(self):
         if self.login_url:
-            r = self.session.get(self.login_url)
+            r = self.session.get(self.login_url['get'])
             parser = parse(r.text)
             data = self.login_data.copy()
             for input in parser.getElementsByTagName('input'):
                 if input.getAttribute('type') == 'hidden':
                     data[input.getAttribute('name')] = input.getAttribute('value')
-            self.session.post(self.login_url, data)
+            r = self.session.post(self.login_url['post'], data)
 
     # zwraca listę obserwowanych obiektów
     def get_objects(self):
@@ -67,21 +67,25 @@ class Page:
         objs = []
         for obj_path in self.paths:
             e = doc
+            # jeśli na początku ścieżki jest id, zaczynamy od elementu z tym id
+            if isinstance(obj_path[0], str):
+                e = doc.getElementById(obj_path[0])
             # pomijamy dodawany przez parser drugi znacznik html
             if e.tagName == 'html' and e.getChildren()[0].tagName == 'html':
                 e = e.getChildren()[0]
             prev_tag = e.tagName
             for index in obj_path:
-                # pomijamy dodawany przez przeglądarki znacznik tbody
-                ignore = False
-                if prev_tag == 'table' and e.tagName != 'tbody' and e.tagName != 'thead':
-                    ignore = True
-                prev_tag = e.tagName
-                if not ignore:
-                    children = e.getChildren()
-                    if len(children) <= index:
-                        return None # błąd!
-                    e = children[index]
+                if isinstance(index, int):
+                    # pomijamy dodawany przez przeglądarki znacznik tbody
+                    ignore = False
+                    if prev_tag == 'table' and e.tagName != 'tbody' and e.tagName != 'thead':
+                        ignore = True
+                    prev_tag = e.tagName
+                    if not ignore:
+                        children = e.getChildren()
+                        if len(children) <= index:
+                            return None # błąd!
+                        e = children[index]
             objs.append(e.innerHTML)
         return objs
 
@@ -113,8 +117,7 @@ def worker(page):
              if objs[i] != new_objs[i]:
                  page.notify(objs[i], new_objs[i])
         objs = new_objs
-        #print(objs) # wyświetla aktualne wartości obiektów
-        # time.sleep(page.interval)
+        print(objs)
         event.wait(page.interval)
 
 
@@ -128,8 +131,7 @@ def start_threads():
         print("Error %d: " % r.status_code + r.text)
         exit()
     global pages
-    pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in
-             json.loads(r.text)]
+    pages = [Page(int(d['id']), d['url'], d['paths'], int(d['interval']), d['login_url'], d['login_data']) for d in json.loads(r.text)]
 
     # wątki do obserwowania stron
     for page in pages:
@@ -179,6 +181,9 @@ try:
             exit()
         msg = r.json()['that']
 
+        # TODO: nie zatrzymywać wątków przed ich rozpoczęciem
+        # (możemy wysłać 'hi' a potem od razu otrzymać 'stop' jeżeli np. w tym samym czasie do serwera zgłosi się inna odświeżaczka z wyższym priorytetem)
+
         action = ''
         if msg == 'nope':
             action = 'bad boy'
@@ -198,7 +203,7 @@ try:
             action = 'update'
             restart_threads()
 
-        print('action: ' + action)
+        # print('action: ' + action)
         time.sleep(4)
 
 except KeyboardInterrupt:

@@ -15,7 +15,7 @@ def page_list(request):
                                             '"url": "' + page.page_url + '"',
                                             '"paths": ' + page.page_data,
                                             '"interval": ' + str(page.interval),
-                                            '"login_url": "' + page.login_url + '"',
+                                            '"login_url": ' + page.login_url,
                                             '"login_data": ' + page.login_data]) + '}' for page in pages)
     except KeyError:
         return HttpResponse('Missing POST data.', status=400)
@@ -61,6 +61,7 @@ def what(request):
             device.user.save()
             device.save()
         else:
+            # TODO: co jeżeli odświeżaczka 'ad', zanim odpowie na 'stop', wyśle 'bye'? device nie dostanie wtedy 'start'
             if device.priority < Device.objects.get(id=device.user.active_device).priority:
                 ad = Device.objects.get(id=device.user.active_device)
                 ad.buffer = 'stop'
@@ -94,6 +95,7 @@ def what(request):
             that = 'update'
         device.buffer = ''
         device.save()
+
     elif msg == 'stopped':
         ad = Device.objects.get(id=device.user.active_device)
         ad.buffer = 'start'

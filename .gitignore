@@ -6,3 +6,4 @@ django/Server/WebNotifier/migrations
 python/Observer/observer/device_id
 python/Observer/observer/dist
 *.exe
+__pycache__/

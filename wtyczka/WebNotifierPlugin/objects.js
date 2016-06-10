@@ -3,6 +3,11 @@
 function getPath(elem) {
     var result = [];
     while (elem.parentElement != null) {
+        if (elem.id) {
+            // jeśli element ma id, dodajemy je do ścieżki i kończymy
+            result.push(elem.id);
+            break;
+        }
         var index = [].indexOf.call(elem.parentElement.children, elem);
         result.push(index);
         elem = elem.parentElement;

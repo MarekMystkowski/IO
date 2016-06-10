@@ -2,20 +2,21 @@ g³ównie w drugiej iteracji:
 
 serwer:
 - strony logowania w osobnym modelu w zaszyfrowanej postaci
-- prze³¹czanie urz¹dzenia gdy aktywuje siê jakieœ z wy¿szym priorytetem
++ prze³¹czanie urz¹dzenia gdy aktywuje siê jakieœ z wy¿szym priorytetem
 - odœwie¿anie na serwerze w przypadku braku aktywnego urz¹dzenia u¿ytkownika
 - wysy³anie powiadomieñ
 
 wtyczka:
-- zapisywanie œcie¿ki z id elementu jeœli jakiœ element go ma
-- zabronione dodawanie pustych stron
++ zapisywanie œcie¿ki z id elementu jeœli jakiœ element go ma
++ zabronione dodawanie pustych stron
 - dozwolone dodawanie tylko tych elementów, które bezpoœrednio zawieraj¹ tekst
++ przechwytywanie danych logowania w zdarzeniu onsubmit formularza (dzia³a enter) i pobieranie wartoœci action
 - wyœwietlanie powiadomieñ
 
 odœwie¿aczka:
 + przesy³anie informacji o zmianach na serwer
 + ponowne logowanie po przerwanej sesji
-- aktualizacja listy stron co okreœlony czas
+? aktualizacja listy stron - chyba na razie nie dzia³a do koñca
 - obs³uga b³êdów (np. ca³kowita zmiana struktury strony, b³êdne dane logowania itp.) i wysy³anie informacji o b³êdach na serwer
 
 strona www:
