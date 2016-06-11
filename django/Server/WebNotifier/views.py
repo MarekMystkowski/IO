@@ -6,7 +6,7 @@ from WebNotifier.models import UserProfile, Page, Device, Change
 def add_page(request):
     try:
         request.session['new_page'] = True
-        for name in ['page_url', 'page_data', 'login_url','login_data']:
+        for name in ['page_url', 'page_title', 'page_data', 'login_url','login_data']:
             request.session[name] = request.POST[name]
     except:
         request.session['new_page'] = False
@@ -19,16 +19,15 @@ def edit_page(request):
     if request.session['new_page']:
         request.session['new_page'] = False
         page_url = request.session['page_url']
+        page_title = request.session['page_title']
         page_data = request.session['page_data']
         login_url = request.session['login_url']
         login_data = request.session['login_data']
-        page = Page(user_profile=user_profile, page_url=page_url, page_data=page_data, login_url=login_url, login_data=login_data)
+        page = Page(user_profile=user_profile, page_url=page_url, page_title=page_title, page_data=page_data, login_url=login_url, login_data=login_data)
         page.save()
 
         return render(request, 'edit_page.html', {
-            'page_id': page.id,
-            'page_url': page_url,
-            'interval': page.interval,
+            'page': page,
             'active': True
         })
 
@@ -50,7 +49,7 @@ def edit_page(request):
 def index(request):
     max_quantity = 20
     user_profile = UserProfile.objects.get(user=request.user)
-    pages = Page.objects.all().filter(user_profile=user_profile)
+    pages = Page.objects.all().filter(user_profile=user_profile).order_by('-id')
     devices = Device.objects.all().filter(user=user_profile).order_by('priority')
 
     # Akcje:

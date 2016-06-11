@@ -67,9 +67,9 @@ function action_save() {
     var form = document.createElement('form');
     form.method = 'POST';
     form.action = 'http://127.0.0.1:8000/add_page/';
-    var page_url = Object.keys(page_data)[0];
     append('page_url', page_url);
-    append('page_data', JSON.stringify(page_data[page_url]));
+    append('page_title', page_data[page_url].title);
+    append('page_data', JSON.stringify(page_data[page_url].paths));
     append('login_url', JSON.stringify(login_url));
     append('login_data', JSON.stringify(login_data));
     url += encodeURIComponent(form.outerHTML);
@@ -94,7 +94,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             // wyślij do niego wiadomość z wybranymi wcześniej elementami
             setTimeout(function() {
                 if (tab.url in page_data)
-                    chrome.tabs.sendMessage(tabId, { message: "add_objects", data: page_data[tab.url] });
+                    chrome.tabs.sendMessage(tabId, { message: "add_objects", data: page_data[tab.url].paths });
             }, 50);
         }
     }
@@ -115,17 +115,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         // na razie możemy dodawać tylko jedną stronę
         if (Object.keys(page_data).length == 0 || request.page_url in page_data) {
             if (!(request.page_url in page_data))
-                page_data[request.page_url] = [];
-            console.log(request.page_url);
-            page_data[request.page_url].push(request.object_path);
+                page_data[request.page_url].paths = [];
+            page_data[request.page_url].title = request.page_title;
+            page_data[request.page_url].paths.push(request.object_path);
         }
     }
     else if (request.type == "remove_object") {
-        var arr = page_data[request.page_url];
+        var arr = page_data[request.page_url].paths;
         var index = arr.indexOf(request.object_path);
         arr.splice(index, 1);
         if (arr.length == 0)
-            delete page_data[request.page_url];
+            delete page_data[request.page_url].paths;
     }
 
     // obsługa popup'a

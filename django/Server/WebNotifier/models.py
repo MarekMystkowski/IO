@@ -35,6 +35,7 @@ class Device(models.Model):
 class Page(models.Model):
     user_profile = models.ForeignKey(UserProfile)
     page_url = models.TextField(default='')
+    title = models.TextField(default='')
     page_data = models.TextField(default='')
     interval = models.IntegerField(default=60) # w sekundach
     login_url = models.TextField(default='', blank=True)
@@ -43,7 +44,7 @@ class Page(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.page_url
+        return self.title + ' (' + self.page_url + ')'
 
 
 class Change(models.Model):

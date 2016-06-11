@@ -1,3 +1,7 @@
+body {
+    font-family: Tahoma;
+}
+
 #content {
     max-width: 1000px;
     margin: auto;
@@ -23,34 +27,54 @@ h2 {
     color: red;
 }
 
+a {
+    color: #12457C;
+    text-decoration: none;
+}
+a:hover {
+    color: #2775AC;
+    text-decoration: underline;
+}
 
-/* Układ standardowej tabeli*/
-.table {
-    display: inline-table;
+label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+}
+
+
+table {
+    border: 1px solid #969571;
+    border-spacing: 0px;
+    table-layout: fixed;
     width: 100%;
+    max-width: 100%;
     margin-bottom: 25px;
 }
-.tr {
-    display: table-row;
-}
-.td, .th {
+td, th {
     padding: 6px;
-    display: table-cell;
     text-align: center;
     height: 100%;
     vertical-align: middle;
-    border: 1px solid #eeeee6;
+    border: 1px solid #DDDDD3;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-.th {
-    background-color: #eeeee6;
+th {
+    background-color: #EEEEE6;
     font-weight: bold;
+    white-space: nowrap;
+    width: 200px;
 }
 .noborder {
     border: none;
 }
 .small {
-    width: 80px;
+    width: 100px;
+}
+.large {
+    width: 100%;
 }
 .left {
     text-align: left;
@@ -60,22 +84,59 @@ h2 {
 }
 
 
-/* Przyciski */
-.button_up, .button_down, .button_delete, .button_save {
+input {
+    background-color: #F8F8F8;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    outline: none;
+    font-size: 15px;
+    height: 20px;
+    padding: 3px;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+input:not([type=submit]) {
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+}
+input[type=text]:focus, input[type=password]:focus, input[type=number]:focus {
+    background-color: #EEF1FD;
+    border: 2px solid #3589C4;
+}
+input[type=checkbox] {
+    width: 20px;
+}
+input[type=submit] {
+    width: 100px;
+    height: 30px;
     cursor: pointer;
+}
+input[type=submit]:hover {
+    background-color: #EEF1FD;
+}
+input[type=submit]:active {
+    background-color: #E6E9F4;
+    border: 2px solid #3589C4;
+}
+
+
+input.button_up, input.button_down, input.button_delete, input.button_save {
+    background-color: #FFFFFF;
+    background-size: 100% 100%;
+    outline: none;
     border: none;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
+    margin: 0px 2px;
 }
 .button_up {
-    background: url(/static/button_up.png) no-repeat ;
+    background: url(/static/button_up.png) no-repeat;
 }
 .button_down {
-    background: url(/static/button_down.png) no-repeat ;
+    background: url(/static/button_down.png) no-repeat;
 }
 .button_delete {
-    background: url(/static/button_delete.png) no-repeat ;
+    background: url(/static/button_delete.png) no-repeat;
 }
 .button_save {
-    background: url(/static/button_save.png) no-repeat ;
+    background: url(/static/button_save.png) no-repeat;
 }

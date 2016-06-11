@@ -72,6 +72,7 @@ function onKeyDown(event) {
         chrome.runtime.sendMessage({
             type: "add_object",
             page_url: document.URL,
+            page_title: document.title,
             object_path: getPath(element)}
         );
         highlightElement(element);

@@ -16,18 +16,12 @@
     <section id="content">
         <article>
             <h2>Dodaj nowe urządzenie:</h2>
-            <form class="table" method="post">
-                <div class="tr">
-                    <div class="td right noborder">Nazwa: </div>
-                    <div class="td left noborder"><input type="text" name="name" maxlength="50" value="{{ device_name }}"></div>
-                </div>
-                <div class="tr">
-                    <div class="td noborder"></div>
-                    <div class="td left noborder">
-                        <input type="hidden" name="device_id" value="{{ device_id }}">
-                        <input type="submit" name="submit" value="Dodaj" />
-                    </div>
-                </div>
+            <form method="post">
+                <label>Nazwa: </label>
+                <input type="text" name="name" maxlength="50" value="{{ device_name }}"><br>
+                <input type="hidden" name="device_id" value="{{ device_id }}">
+                <label></label>
+                <input type="submit" name="submit" value="Dodaj" />
             </form>
         </article>
     </section>

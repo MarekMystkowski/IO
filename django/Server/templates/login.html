@@ -20,50 +20,32 @@
             </div>
         {% endif %}
 
-        <article>
+        <article style="float: left;">
             <h2>Logowanie</h2>
-            <form class="table" method="post" action="/login/">
-                <div class="tr">
-                    <div class="td right noborder">Login: </div>
-                    <div class="td left noborder"><input type="text" name="username" maxlength="30"></div>
-                </div>
-                <div class="tr">
-                    <div class="td right noborder">Hasło: </div>
-                    <div class="td left noborder"><input type="password" name="password" type="password" ></div>
-                </div>
-                <div class="tr">
-                    <div class="td noborder"></div>
-                    <div class="td left noborder">
-                        <input type="hidden" name="next" value="{{ next }}"/>
-                        <input type="submit" name="submit_login" value="Zaloguj" />
-                    </div>
-                </div>
+            <form method="post" action="/login/">
+                <label>Login: </label>
+                <input type="text" name="username" maxlength="30"><br>
+                <label>Hasło: </label>
+                <input type="password" name="password" type="password"><br>
+                <label></label>
+                <input type="hidden" name="next" value="{{ next }}">
+                <input type="submit" name="submit_login" value="Zaloguj">
             </form>
         </article>
 
-        <article>
+        <article style="float: right;">
             <div class="register">
                 <h2>Rejestracja</h2>
-                <form class="table" method="post" action="/login/">
-                    <div class="tr">
-                        <div class="td right noborder">Login: </div>
-                        <div class="td left noborder"><input class="id_username" maxlength="30" name="username" type="text"></div>
-                    </div>
-                    <div class="tr">
-                        <div class="td right noborder">E-mail:</div>
-                        <div class="td left noborder"><input class="id_email" maxlength="254" name="email" type="email"></div>
-                    </div>
-                    <div class="tr">
-                        <div class="td right noborder">Hasło:</div>
-                        <div class="td left noborder"><input class="id_password" name="password" type="password" ></div>
-                    </div>
-                    <div class="tr">
-                        <div class="td noborder"></div>
-                        <div class="td left noborder">
-                            <input type="hidden" name="next" value="{{ next }}"/>
-                            <input type="submit" name="submit_register" value="Zarejestruj" />
-                        </div>
-                    </div>
+                <form method="post" action="/login/">
+                    <label>Login: </label>
+                    <input maxlength="30" name="username" type="text"><br>
+                    <label>E-mail: </label>
+                    <input maxlength="254" name="email" type="email"><br>
+                    <label>Hasło: </label>
+                    <input name="password" type="password" ><br>
+                    <label></label>
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <input type="submit" name="submit_register" value="Zarejestruj">
                 </form>
             </div>
         </article>
