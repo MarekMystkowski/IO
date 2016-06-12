@@ -8,7 +8,7 @@ var login_data = {};
 // funkcja wołana po executeScript
 function callback() {
     if (chrome.runtime.lastError) {
-        console.log(chrome.runtime.lastError.message);
+        chrome.extension.getBackgroundPage().console.log(chrome.runtime.lastError.message);
     } else {
         // Tab exists
     }
@@ -58,7 +58,6 @@ function action_stop() {
 
 function action_save() {
     // czy zostały wybrane jakiekolwiek elementy?
-    chrome.extension.getBackgroundPage().console.log('no kurwa');
     var page_url = "";
     for (var key in page_data)
         if (page_data.hasOwnProperty(key))
@@ -127,7 +126,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         // na razie możemy dodawać tylko jedną stronę
         if (Object.keys(page_data).length == 0 || request.page_url in page_data) {
             if (!(request.page_url in page_data))
+            {
+                page_data[request.page_url] = {};
                 page_data[request.page_url].paths = [];
+            }
             page_data[request.page_url].title = request.page_title;
             page_data[request.page_url].paths.push(request.object_path);
         }
