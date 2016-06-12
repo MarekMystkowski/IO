@@ -10,6 +10,17 @@ def update_device(user):
         active_dev.buffer = 'update'
     active_dev.save()
 
+def priorities_changed(user_profile):
+    # TODO to samo co w api/views.py
+    active_devs = Device.objects.filter(user=user_profile, active=True).order_by('priority')
+    if len(active_devs) > 0:
+        topd = active_devs[0]
+        if user_profile.active_device != topd.id:
+            ad = Device.objects.get(id=user_profile.active_device)
+            ad.buffer = 'stop'
+            ad.save()
+            user_profile.active_device = topd.id
+            user_profile.save()
 
 def add_page(request):
     try:
@@ -83,6 +94,7 @@ def index(request):
             device2.priority += 1
             device1.save()
             device2.save()
+            priorities_changed(user_profile)
         if request.POST.get('submit_down_device', False):
             device_id = request.POST['device_id']
             device1 = Device.objects.get(id=device_id)
@@ -91,6 +103,8 @@ def index(request):
             device2.priority -= 1
             device1.save()
             device2.save()
+            priorities_changed(user_profile)
+        #TODO, ale nie trzeba tego prezentować
         if request.POST.get('submit_del_device', False):
             device_id = request.POST['device_id']
             device = Device.objects.get(id=device_id)
@@ -153,6 +167,8 @@ def edit_device(request):
         name = request.POST.get('name', 'New Device')
         prio = len(Device.objects.filter(user=user_profile)) + 1
         Device(id=device_id, name=name, priority=prio, user=user_profile).save()
+        priorities_changed(user_profile)
+
         return HttpResponseRedirect('/')
 
     return HttpResponseRedirect('/')
