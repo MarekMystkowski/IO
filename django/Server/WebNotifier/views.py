@@ -3,6 +3,14 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from WebNotifier.models import UserProfile, Page, Device, Change
 
+
+def update_device(user):
+    active_dev = Device.objects.get(id=user.active_device)
+    if active_dev.buffer == '':
+        active_dev.buffer = 'update'
+    active_dev.save()
+
+
 def add_page(request):
     try:
         request.session['new_page'] = True
@@ -12,6 +20,7 @@ def add_page(request):
         request.session['new_page'] = False
         return HttpResponseRedirect('/')
     return HttpResponseRedirect('/edit_page')
+
 
 @login_required
 def edit_page(request):
@@ -25,6 +34,7 @@ def edit_page(request):
         login_data = request.session['login_data']
         page = Page(user_profile=user_profile, page_url=page_url, title=page_title, page_data=page_data, login_url=login_url, login_data=login_data)
         page.save()
+        update_device(user_profile)
 
         return render(request, 'edit_page.html', {
             'page': page,
@@ -39,6 +49,7 @@ def edit_page(request):
             if request.POST.get('active', False):
                 page.active = True
             page.save()
+            update_device(user_profile)
         except KeyError:
             pass
 
