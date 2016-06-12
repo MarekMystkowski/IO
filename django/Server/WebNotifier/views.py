@@ -23,7 +23,7 @@ def edit_page(request):
         page_data = request.session['page_data']
         login_url = request.session['login_url']
         login_data = request.session['login_data']
-        page = Page(user_profile=user_profile, page_url=page_url, page_title=page_title, page_data=page_data, login_url=login_url, login_data=login_data)
+        page = Page(user_profile=user_profile, page_url=page_url, title=page_title, page_data=page_data, login_url=login_url, login_data=login_data)
         page.save()
 
         return render(request, 'edit_page.html', {
