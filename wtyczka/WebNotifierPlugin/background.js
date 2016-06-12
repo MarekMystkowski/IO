@@ -5,6 +5,15 @@ var login_url = {};
 var login_data = {};
 
 
+// funkcja wołana po executeScript
+function callback() {
+    if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError.message);
+    } else {
+        // Tab exists
+    }
+}
+
 /* Funkcje akcji */
 
 function action_login_yes() {
@@ -12,7 +21,7 @@ function action_login_yes() {
     // czekaj na zalogowanie na dowolnej karcie
     chrome.tabs.query({}, function(tabs) {
         tabs.forEach(function(tab) {
-            chrome.tabs.executeScript(tab.id, {file: "login.js"});
+            chrome.tabs.executeScript(tab.id, {file: "login.js"}, callback);
         })
     });
 }
@@ -28,7 +37,7 @@ function action_objects(){
     chrome.tabs.query({}, function(tabs) {
         tabs.forEach(function(tab) {
             chrome.tabs.sendMessage(tab.id, {message: "stop_login"});
-            chrome.tabs.executeScript(tab.id, {file: "objects.js"});
+            chrome.tabs.executeScript(tab.id, {file: "objects.js"}, callback);
         })
     });
 }
@@ -49,6 +58,7 @@ function action_stop() {
 
 function action_save() {
     // czy zostały wybrane jakiekolwiek elementy?
+    chrome.extension.getBackgroundPage().console.log('no kurwa');
     var page_url = "";
     for (var key in page_data)
         if (page_data.hasOwnProperty(key))
@@ -82,15 +92,17 @@ function action_save() {
 
 /* Zdarzenia */
 
+
+
 // otwarcie nowej strony na karcie
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status == "complete") {
         if (state == "login_wait") {
             // wywołaj skrypt przechwytujący logowanie
-            chrome.tabs.executeScript(tabId, {file: "login.js"});
+            chrome.tabs.executeScript(tabId, {file: "login.js"}, callback);
         } else if (state == "objects") {
             // wywołaj skrypt do wybierania obiektów
-            chrome.tabs.executeScript(tabId, {file: "objects.js"});
+            chrome.tabs.executeScript(tabId, {file: "objects.js"}, callback);
             // wyślij do niego wiadomość z wybranymi wcześniej elementami
             setTimeout(function() {
                 if (tab.url in page_data)
