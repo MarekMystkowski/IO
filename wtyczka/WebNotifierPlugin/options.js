@@ -1,32 +1,37 @@
-// // Saves options to chrome.storage.sync.
-// function save_options() {
-//   var color = document.getElementById('color').value;
-//   var likesColor = document.getElementById('like').checked;
-//   chrome.storage.sync.set({
-//     favoriteColor: color,
-//     likesColor: likesColor
-//   }, function() {
-//     // Update status to let user know options were saved.
-//     var status = document.getElementById('status');
-//     status.textContent = 'Options saved.';
-//     setTimeout(function() {
-//       status.textContent = '';
-//     }, 750);
-//   });
-// }
-//
-// // Restores select box and checkbox state using the preferences
-// // stored in chrome.storage.
-// function restore_options() {
-//   // Use default value color = 'red' and likesColor = true.
-//   chrome.storage.sync.get({
-//     favoriteColor: 'red',
-//     likesColor: true
-//   }, function(items) {
-//     document.getElementById('color').value = items.favoriteColor;
-//     document.getElementById('like').checked = items.likesColor;
-//   });
-// }
-// document.addEventListener('DOMContentLoaded', restore_options);
-// document.getElementById('save').addEventListener('click',
-//     save_options);
+
+var registrationId = "";
+var senderId = "699809079851";
+
+function register() {
+  chrome.gcm.register([senderId], registerCallback);
+}
+
+function registerCallback(regId) {
+  registrationId = regId;
+
+  if (chrome.runtime.lastError) {
+    chrome.extension.getBackgroundPage().console.log(chrome.runtime.lastError.message);
+    alert("Error: error.");
+    return;
+  }
+
+  chrome.storage.local.set({rid: registrationId});
+}
+
+window.onload = function() {
+    chrome.storage.local.get("rid", function (result) {
+        if (typeof result.rid == "undefined")
+        {
+            registrationId = "";
+            register();
+        }
+        else
+        {
+            registrationId = result.rid;
+        }
+    });
+    document.getElementById("connect").addEventListener("click", function(){
+        nurl = "http://127.0.0.1:8000/notify_me/?rid=" + registrationId;
+        chrome.tabs.create({ url: nurl });
+    });
+};
