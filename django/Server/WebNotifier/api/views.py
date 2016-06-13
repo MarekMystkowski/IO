@@ -39,8 +39,8 @@ def new_change(request):
     except ObjectDoesNotExist:
         return HttpResponse('Invalid device or page id.', status=401)
 
-    gdevice = GCMDevice(name="chrome", registration_id="APA91bFLNtkQT4WeKdINpweqLtqV_cu3CuZEIOJgY8B4f88RzMHOuZTpCd_vJSlIM4JqJqAbVYuWnnH6kyK8LIpmy58pPL72_kW5YAhKxWUeE5fVEeQHgfE8PKQMqw1ZfR3YNHuGmUFNbyk3nz7j4nNBtFcHb2SUBQ")
-    gdevice.send_message("You've got mail")
+    devices = GCMDevice.objects.filter(user=device.user.user)
+    devices.send_message("Nowa zmiana w: " + page.title)
 
     return HttpResponse('')
 

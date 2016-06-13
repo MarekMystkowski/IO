@@ -172,11 +172,12 @@ function getNotificationId() {
 function messageReceived(message) {
 
   var messageString = "";
-  for (var key in message.data) {
-    if (messageString != "")
-      messageString += ", "
-    messageString += key + ":" + message.data[key];
-  }
+  // for (var key in message.data) {
+  //   if (messageString != "")
+  //     messageString += ", "
+  //   messageString += key + ":" + message.data[key];
+  // }
+  messageString += message.data['message'];
 
   chrome.notifications.create(getNotificationId(), {
     title: "Nowa zmiana",
