@@ -1,27 +1,27 @@
-g³ównie w drugiej iteracji:
+gÅ‚Ã³wnie w drugiej iteracji:
 
 serwer:
 - strony logowania w osobnym modelu w zaszyfrowanej postaci
-+ prze³¹czanie urz¹dzenia gdy aktywuje siê jakieœ z wy¿szym priorytetem
-- odœwie¿anie na serwerze w przypadku braku aktywnego urz¹dzenia u¿ytkownika
-- wysy³anie powiadomieñ
++ przeÅ‚Ä…czanie urzÄ…dzenia gdy aktywuje siÄ™ jakieÅ› z wyÅ¼szym priorytetem
+- odÅ›wieÅ¼anie na serwerze w przypadku braku aktywnego urzÄ…dzenia uÅ¼ytkownika
++ wysyÅ‚anie powiadomieÅ„
 
 wtyczka:
-+ zapisywanie œcie¿ki z id elementu jeœli jakiœ element go ma
++ zapisywanie Å›cieÅ¼ki z id elementu jeÅ›li jakiÅ› element go ma
 + zabronione dodawanie pustych stron
-- dozwolone dodawanie tylko tych elementów, które bezpoœrednio zawieraj¹ tekst
-+ przechwytywanie danych logowania w zdarzeniu onsubmit formularza (dzia³a enter) i pobieranie wartoœci action
-- wyœwietlanie powiadomieñ
+- dozwolone dodawanie tylko tych elementÃ³w, ktÃ³re bezpoÅ›rednio zawierajÄ… tekst
++ przechwytywanie danych logowania w zdarzeniu onsubmit formularza (dziaÅ‚a enter) i pobieranie wartoÅ›ci action
++ wyÅ›wietlanie powiadomieÅ„
 
-odœwie¿aczka:
-+ przesy³anie informacji o zmianach na serwer
+odÅ›wieÅ¼aczka:
++ przesyÅ‚anie informacji o zmianach na serwer
 + ponowne logowanie po przerwanej sesji
-? aktualizacja listy stron - chyba na razie nie dzia³a do koñca
-- obs³uga b³êdów (np. ca³kowita zmiana struktury strony, b³êdne dane logowania itp.) i wysy³anie informacji o b³êdach na serwer
++ aktualizacja listy stron
+- obsÅ‚uga bÅ‚Ä™dÃ³w (np. caÅ‚kowita zmiana struktury strony, bÅ‚Ä™dne dane logowania itp.) i wysyÅ‚anie informacji o bÅ‚Ä™dach na serwer
 
 strona www:
-- wyœwietlanie informacji o b³êdach na obserwowanych stronach
-- bug przy dodawaniu urz¹dzenia: gdy jesteœmy na stronie edit_device i siê w tym czasie wylogujemy, to po naciœniêciu Dodaj przenosi nas poprawnie na stronê logowania, ale potem po zalogowaniu siê wywala
+- wyÅ›wietlanie informacji o bÅ‚Ä™dach na obserwowanych stronach
+- bug przy dodawaniu urzÄ…dzenia: gdy jesteÅ›my na stronie edit_device i siÄ™ w tym czasie wylogujemy, to po naciÅ›niÄ™ciu Dodaj przenosi nas poprawnie na stronÄ™ logowania, ale potem po zalogowaniu siÄ™ wywala
 
 Android:
-- wyœwietlanie powiadomieñ
++ wyÅ›wietlanie powiadomieÅ„
