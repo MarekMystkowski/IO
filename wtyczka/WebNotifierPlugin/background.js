@@ -154,3 +154,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         action_save();
     sendResponse({data: state});
 });
+
+chrome.runtime.onInstalled.addListener(function(details){
+     chrome.runtime.openOptionsPage();
+});
