@@ -5,10 +5,11 @@ from WebNotifier.models import UserProfile, Page, Device, Change
 
 
 def update_device(user):
-    active_dev = Device.objects.get(id=user.active_device)
-    if active_dev.buffer == '':
-        active_dev.buffer = 'update'
-    active_dev.save()
+    if user.active_device != '':
+        active_dev = Device.objects.get(id=user.active_device)
+        if active_dev.buffer == '':
+            active_dev.buffer = 'update'
+        active_dev.save()
 
 def priorities_changed(user_profile):
     # TODO to samo co w api/views.py
