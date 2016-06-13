@@ -204,7 +204,7 @@ try:
             action = 'update'
             restart_threads()
 
-        print('action: ' + action)
+        # print('action: ' + action)
         time.sleep(4)
 
 except KeyboardInterrupt:

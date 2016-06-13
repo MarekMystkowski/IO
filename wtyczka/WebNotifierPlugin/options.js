@@ -3,19 +3,19 @@ var registrationId = "";
 var senderId = "699809079851";
 
 function register() {
-  chrome.gcm.register([senderId], registerCallback);
+    chrome.gcm.register([senderId], registerCallback);
 }
 
 function registerCallback(regId) {
-  registrationId = regId;
+    registrationId = regId;
 
-  if (chrome.runtime.lastError) {
-    chrome.extension.getBackgroundPage().console.log(chrome.runtime.lastError.message);
-    alert("Error: error.");
-    return;
-  }
+    if (chrome.runtime.lastError) {
+        chrome.extension.getBackgroundPage().console.log(chrome.runtime.lastError.message);
+        alert("Error: error.");
+        return;
+    }
 
-  chrome.storage.local.set({rid: registrationId});
+    chrome.storage.local.set({rid: registrationId});
 }
 
 window.onload = function() {
