@@ -23,6 +23,7 @@ def priorities_changed(user_profile):
             user_profile.active_device = topd.id
             user_profile.save()
 
+
 def add_page(request):
     try:
         request.session['new_page'] = True
