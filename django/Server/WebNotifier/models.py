@@ -38,7 +38,7 @@ class Page(models.Model):
     title = models.TextField(default='')
     page_data = models.TextField(default='')
     interval = models.IntegerField(default=60) # w sekundach
-    login_url = models.TextField(default='', blank=True)
+    login_url = models.TextField(default='')
     login_data = models.TextField(default='')
     recent_state = models.TextField(default='', blank=True)
     active = models.BooleanField(default=True)

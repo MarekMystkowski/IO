@@ -17,26 +17,16 @@
 
         <article>
             <h2>Ustaw parametry dla nowej strony:</h2>
-            <form class="table" method="post">
-                <div class="tr">
-                    <div class="td right noborder">Strona: </div>
-                    <div class="td left noborder"><a href="{{ page.page_url }}">{{ page.title }}</a></div>
-                </div>
-                <div class="tr">
-                    <div class="td right noborder">Częstotliwość: </div>
-                    <div class="td left noborder"><input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund</div>
-                </div>
-                <div class="tr">
-                    <div class="td right noborder">Obserwuj: </div>
-                    <div class="td left noborder"><input type="checkbox" name="active" value="True" {% if page.active %} checked {% endif %}></div>
-                </div>
-                <div class="tr">
-                    <div class="td noborder"></div>
-                    <div class="td left noborder">
-                        <input type="hidden" name="page_id" value="{{ page.id }}">
-                        <input type="submit" name="submit" value="Zapisz zmiany" />
-                    </div>
-                </div>
+            <form method="post">
+                <label>Tytuł strony: </label>
+                <input type="text" name="title" value="{{ page.title }}" style="width: 800px"><br>
+                <label>Częstotliwość: </label>
+                <input type="number" name="interval" min="1" max="10000" value="{{ page.interval }}"> sekund<br>
+                <label>Obserwuj: </label>
+                <input type="checkbox" name="active" value="True" checked><br>
+                <input type="hidden" name="page_id" value="{{ page.id }}">
+                <label></label>
+                <input type="submit" name="submit" value="Zapisz" />
             </form>
         </article>
     </section>

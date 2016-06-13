@@ -47,9 +47,10 @@ def edit_page(request):
         page_data = request.session['page_data']
         login_url = request.session['login_url']
         login_data = request.session['login_data']
-        page = Page(user_profile=user_profile, page_url=page_url, title=page_title, page_data=page_data, login_url=login_url, login_data=login_data)
+        # dodajemy stronę, ale aktywować możemy dopiero po kliknięciu "zapisz"
+        # chodzi o to żeby odświeżaczka pobrała stronę dopiero gdy ustawimy częstotliwość
+        page = Page(user_profile=user_profile, page_url=page_url, title=page_title, page_data=page_data, login_url=login_url, login_data=login_data, active=False)
         page.save()
-        update_device(user_profile)
 
         return render(request, 'edit_page.html', {
             'page': page,
@@ -59,6 +60,7 @@ def edit_page(request):
     if request.method == 'POST':
         try:
             page = Page.objects.get(id=request.POST['page_id'])
+            page.title = request.POST['title']
             page.interval = request.POST['interval']
             page.active = False
             if request.POST.get('active', False):
@@ -86,10 +88,12 @@ def index(request):
             page.active = request.POST.get('active', "") == "True"
             page.interval = request.POST['interval']
             page.save()
+            update_device(user_profile)
         if request.POST.get('submit_del_page', False):
             page_id = request.POST['page_id']
             page = Page.objects.get(id=page_id)
             page.delete()
+            update_device(user_profile)
         if request.POST.get('submit_up_device', False):
             device_id = request.POST['device_id']
             device1 = Device.objects.get(id=device_id)

@@ -29,7 +29,7 @@
 
                     {% for change in new_changes %}
                         <tr>
-                            <td class="left large" title="{{ page.title }}"><a href="{{ change.page.page_url }}">{{ change.page.title }}</a></td>
+                            <td class="left large" title="{{ change.page.title }}"><a href="{{ change.page.page_url }}">{{ change.page.title }}</a></td>
                             <td class="left">{{ change.date.date }}, {{ change.date.time }}</td>
                             <td class="left large" title="{{ change.old_value }} → {{ change.new_value }}">{{ change.old_value }} → {{ change.new_value }}</td>
                             <td class="small">
@@ -69,7 +69,7 @@
 
                     {% for change in old_changes %}
                         <tr>
-                            <td class="left large" title="{{ page.title }}"><a href="{{ change.page.page_url }}">{{ change.page.title }}</a></td>
+                            <td class="left large" title="{{ change.page.title }}"><a href="{{ change.page.page_url }}">{{ change.page.title }}</a></td>
                             <td class="left">{{ change.date.date }}, {{ change.date.time }}</td>
                             <td class="left large" title="{{ change.old_value }} → {{ change.new_value }}">{{ change.old_value }} → {{ change.new_value }}</td>
                         </tr>

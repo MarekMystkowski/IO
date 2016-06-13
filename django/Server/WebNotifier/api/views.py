@@ -40,7 +40,7 @@ def new_change(request):
         return HttpResponse('Invalid device or page id.', status=401)
 
     devices = GCMDevice.objects.filter(user=device.user.user)
-    devices.send_message("Nowa zmiana w: " + page.title)
+    devices.send_message(page.title + ': ' + old_value + ' -> ' + new_value)
 
     return HttpResponse('')
 

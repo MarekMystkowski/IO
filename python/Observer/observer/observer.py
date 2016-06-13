@@ -117,7 +117,8 @@ def worker(page):
              if objs[i] != new_objs[i]:
                  page.notify(objs[i], new_objs[i])
         objs = new_objs
-        print(objs)
+        # print(objs)
+        # page.notify("TEST", new_objs[0])
         event.wait(page.interval)
 
 
@@ -203,7 +204,7 @@ try:
             action = 'update'
             restart_threads()
 
-        # print('action: ' + action)
+        print('action: ' + action)
         time.sleep(4)
 
 except KeyboardInterrupt:
