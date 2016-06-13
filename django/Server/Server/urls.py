@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from WebNotifier.views import add_page, edit_page, index, add_device, edit_device
+from WebNotifier.views import add_page, edit_page, index, add_device, edit_device, notify_me, edit_notify
 from WebNotifier.user.views import index as login
 from WebNotifier.user.views import user_logout
 
@@ -28,5 +28,7 @@ urlpatterns = [
     url(r'^edit_device/', edit_device),  # do wprowadzenie pierwszych danych
     url(r'^$', index),
     url(r'^login/$', login),
-    url(r'^logout/$', user_logout)
+    url(r'^logout/$', user_logout),
+    url(r'^notify_me/$', notify_me),
+    url(r'^edit_notify/$', edit_notify),
 ]

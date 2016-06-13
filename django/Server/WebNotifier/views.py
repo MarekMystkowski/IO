@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from push_notifications.models import GCMDevice
+
 from WebNotifier.models import UserProfile, Page, Device, Change
 
 
@@ -175,3 +177,26 @@ def edit_device(request):
 
     return HttpResponseRedirect('/')
 
+
+def notify_me(request):
+    try:
+        request.session['notify_me'] = True
+        request.session['rid'] = request.GET['rid']
+    except:
+        request.session['notify_me'] = False
+        return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/edit_notify')
+
+
+@login_required
+def edit_notify(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if request.session['notify_me']:
+        request.session['notify_me'] = False
+        rid = request.session['rid']
+        if rid == "":
+            return HttpResponseRedirect('/')
+        new_notifier = GCMDevice(registration_id=rid, user=user_profile.user)
+        new_notifier.save()
+
+    return HttpResponseRedirect('/')

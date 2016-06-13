@@ -108,3 +108,4 @@ def what(request):
 
     ret = {'that': that}
     return HttpResponse(json.dumps(ret))
+
