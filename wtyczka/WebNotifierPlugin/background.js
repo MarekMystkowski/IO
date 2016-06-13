@@ -158,3 +158,32 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 chrome.runtime.onInstalled.addListener(function(details){
      chrome.runtime.openOptionsPage();
 });
+
+// Powiadomienia
+
+// curl to testowania
+// curl -H "Content-Type:application/x-www-form-urlencoded;charset=UTF-8" -H "Authorization: key= AIzaSyAezekme7gnKSMaZht4mRlPQLRZWU3hXs8" -d "registration_id=APA91bFLNtkQT4WeKdINpweqLtqV_cu3CuZEIOJgY8B4f88RzMHOuZTpCd_vJSlIM4JqJqAbVYuWnnH6kyK8LIpmy58pPL72_kW5YAhKxWUeE5fVEeQHgfE8PKQMqw1ZfR3YNHuGmUFNbyk3nz7j4nNBtFcHb2SUBQ" -d data.YOUR_MESSAGE_KEY=YOUR_MESSAGE_VALUE https://android.googleapis.com/gcm/send
+
+function getNotificationId() {
+  var id = Math.floor(Math.random() * 9007199254740992) + 1;
+  return id.toString();
+}
+
+function messageReceived(message) {
+
+  var messageString = "";
+  for (var key in message.data) {
+    if (messageString != "")
+      messageString += ", "
+    messageString += key + ":" + message.data[key];
+  }
+
+  chrome.notifications.create(getNotificationId(), {
+    title: "Nowa zmiana",
+    iconUrl: 'icon.png',
+    type: "basic",
+    message: messageString
+  }, function() {});
+}
+
+chrome.gcm.onMessage.addListener(messageReceived);
